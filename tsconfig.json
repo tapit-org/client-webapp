@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"baseUrl": "src",
+		"target": "es5",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"noImplicitAny": false,
+		"removeComments": false,
+		"preserveConstEnums": true,
+		"sourceMap": true,
+		"outDir": "dist",
+		"jsx": "react-jsx",
+		"esModuleInterop": true
+	},
+	"exclude": ["dist", "node_modules"]
+}

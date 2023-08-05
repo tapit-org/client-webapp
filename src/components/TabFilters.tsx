@@ -85,7 +85,7 @@ const TabFilters = () => {
 							className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border focus:outline-none select-none
                ${open ? '!border-primary-500 ' : 'border-neutral-300 dark:border-neutral-700'}
                 ${
-					!!categoriesState.length
+					categoriesState.length
 						? '!border-primary-500 bg-primary-50 text-primary-900'
 						: 'border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-500'
 				}
@@ -220,7 +220,7 @@ const TabFilters = () => {
 							className={`flex items-center justify-center px-4 py-2 text-sm border rounded-full focus:outline-none select-none
               ${open ? '!border-primary-500 ' : ''}
                 ${
-					!!sortOrderStates.length
+					sortOrderStates.length
 						? '!border-primary-500 bg-primary-50 text-primary-900'
 						: 'border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-500'
 				}
@@ -340,7 +340,7 @@ const TabFilters = () => {
 							className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border focus:outline-none select-none
               ${open ? '!border-primary-500 ' : ''}
                 ${
-					!!colorsState.length
+					colorsState.length
 						? '!border-primary-500 bg-primary-50 text-primary-900'
 						: 'border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-500'
 				}
@@ -585,7 +585,7 @@ const TabFilters = () => {
 							name={item.name}
 							subLabel={item.description}
 							label={item.name}
-							defaultChecked={!!item.defaultChecked}
+							defaultChecked={item.defaultChecked}
 							sizeClassName="w-5 h-5 sm:w-6 sm:h-6"
 						/>
 					))}
@@ -597,7 +597,7 @@ const TabFilters = () => {
 							name={item.name}
 							subLabel={item.description}
 							label={item.name}
-							defaultChecked={!!item.defaultChecked}
+							defaultChecked={item.defaultChecked}
 							sizeClassName="w-5 h-5 sm:w-6 sm:h-6"
 						/>
 					))}

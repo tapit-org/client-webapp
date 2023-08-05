@@ -18,6 +18,7 @@ import CheckoutPage from 'views/Checkout';
 import ListProfiles from 'views/Profile/ListProfiles';
 import ViewProfile from 'views/Profile/ViewProfile';
 import EditProfile from 'views/Profile/EditProfile';
+import CreateProfile from 'views/Profile/CreateProfile';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
@@ -85,6 +86,11 @@ const ProtectedRoutes = {
 		{
 			path: '/profiles',
 			element: <ListProfiles />,
+			restricted: true,
+		},
+        {
+			path: '/profile/create',
+			element: <CreateProfile />,
 			restricted: true,
 		},
         {

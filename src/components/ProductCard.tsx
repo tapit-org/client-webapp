@@ -11,8 +11,9 @@ import ButtonSecondary from 'shared/Button/ButtonSecondary';
 import BagIcon from 'components/Icons/BagIcon';
 import toast from 'react-hot-toast';
 import { Transition } from '@headlessui/react';
-import ModalQuickView from 'components/ModalQuickView';
+import Modal from 'components/Modal';
 import ProductStatus from 'components/ProductStatus';
+import ProductQuickView from './ProductQuickView';
 
 export interface ProductCardProps {
 	className?: string;
@@ -270,10 +271,12 @@ const ProductCard: FC<ProductCardProps> = ({ className = '', data = PRODUCTS[0],
 			</div>
 
 			{/* QUICKVIEW */}
-			<ModalQuickView
+			<Modal
 				show={showModalQuickView}
 				onCloseModalQuickView={() => setShowModalQuickView(false)}
-			/>
+			>
+                <ProductQuickView/>
+            </Modal>
 		</>
 	);
 };

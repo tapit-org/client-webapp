@@ -1,138 +1,218 @@
-import { Grid } from "@mui/material";
-import Heading from "components/Heading/Heading";
-import useLoader from "hooks/useLoader";
-import CustomButton from "interfaces/custombutton.interface";
-import Social from "interfaces/social.interface";
+import { AccessibilityNewOutlined, ArrowBackIosNewOutlined, ArrowForwardIosOutlined, BusinessOutlined, EmailOutlined, ImageOutlined, LinkOutlined, NotesOutlined, PersonOutlined, ResetTvOutlined, RestartAltOutlined, SaveOutlined, TitleOutlined } from "@mui/icons-material";
+import { Box, Grid, Paper, Stack, Tooltip, Typography } from "@mui/material";
+import { ProfileInterface } from "interfaces/profile.interface";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { getProfileData } from "services/profile.service";
+import { useParams } from "react-router-dom";
+import { getNewProfileData } from "services/profile.service";
+import Input from "shared/Input/Input";
+import DefaultProfileTemplate from "../templates/Default";
+import Nav from "shared/Nav/Nav";
+import NavItem2 from "components/NavItem2";
+import Textarea from "shared/Textarea/Textarea";
+import ProfileForm from "./tabs/ProfileForm";
+import ImagesUploader from "./tabs/ImagesUploader";
+import ButtonPrimary from "shared/Button/ButtonPrimary";
+import ButtonSecondary from "shared/Button/ButtonSecondary";
+import ActionButtons from "./tabs/ActionButtons";
+import AboutForm from "./tabs/AboutForm";
 
-const TABS = {
-    PICTURE: "PICTURE",
-    DETAILS: "DETAILS",
-    SOCIALS: "SOCIALS",
-    CUSTOM_BUTTONS: "CUSTOM_BUTTONS",
-    PREVIEW: "PREVIEW"
+const TAB_NAMES = {
+    PROFILE_DETAILS: 'Profile Details',
+    IMAGES: 'Images',
+    ACTION_BUTTONS: 'Action Buttons',
+    ABOUT: 'About',
+    SOCIALS: 'Socials'
 }
+
+
+
 const EditProfile = () => {
     const { username } = useParams()
-    const navigate = useNavigate();
-    const { user } = useSelector((state: any) => {
-        return state.user
-    })
-    const [activeTab, setActiveTab] = useState<string>(TABS.DETAILS)
-    const [name, setName] = useState("");
-    const [title, setTitle] = useState("");
-    const [about, setAbout] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [phoneCode, setPhoneCode] = useState("");
-    const [location, setLocation] = useState("");
-    const [socials, setSocials] = useState<Social[]>([] as Social[]);
-    const [customButtons, setCustomButtons] = useState<CustomButton[]>([] as CustomButton[]);
-    const [profileImageBase64, setProfileImageBase64] = useState("");
-    const [profileImageUrl, setProfileImageUrl] = useState("")
-    const [coverImageBase64, setCoverImageBase64] = useState("");
-    const [coverImageUrl, setCoverImageUrl] = useState("")
-    const [showLoader, setShowLoader] = useState(false)
-    useLoader('edit_profile', showLoader)
+    const [profileData, setProfileData] = useState(null as ProfileInterface)
+    const [activeTab, setActiveTab] = useState(TAB_NAMES.PROFILE_DETAILS);
+    const [activeTabIndex, setActiveTabIndex] = useState(0)
+
+    const [name, setName] = useState("")
+    const [title, setTitle] = useState("")
+    const [company, setCompany] = useState("")
+    const [about, setAbout] = useState("")
+    const [profileImage, setProfileImage] = useState("")
+    const [coverImage, setCoverImage] = useState("")
+    const [actionButtons, setActionButtons] = useState([
+        {
+            id: 'website',
+            enabled: false,
+            text: '',
+            link: ''
+        },
+        {
+            id: 'email',
+            enabled: false,
+            text: '',
+            link: ''
+        },
+        {
+            id: 'phone',
+            enabled: false,
+            text: '',
+            link: ''
+        }
+    ])
+    const TABS = [
+        {
+            name: TAB_NAMES.PROFILE_DETAILS,
+            icon: <PersonOutlined fontSize="small" />,
+            component: <ProfileForm 
+                name={name}
+                setName={setName}
+                title={title}
+                setTitle={setTitle}
+                company={company}
+                setCompany={setCompany}
+             />
+        },
+        {
+            name: TAB_NAMES.IMAGES,
+            icon: <ImageOutlined fontSize="small" />,
+            component: <ImagesUploader 
+                profileImage={profileImage} 
+                setProfileImage={setProfileImage} 
+                coverImage={coverImage} 
+                setCoverImage={setCoverImage}
+            />
+        },
+        {
+            name: TAB_NAMES.ACTION_BUTTONS,
+            icon: <AccessibilityNewOutlined fontSize="small" />,
+            component: <ActionButtons 
+                actionButtons={actionButtons} 
+                setActionButtons={setActionButtons}
+            />
+        },
+        {
+            name: TAB_NAMES.ABOUT,
+            icon: <NotesOutlined fontSize="small" />,
+            component: <AboutForm about={about} setAbout={setAbout}/>
+        },
+        {
+            name: TAB_NAMES.SOCIALS,
+            icon: <LinkOutlined fontSize="small" />,
+            // component: <ImagesUploader profileData={profileData} setProfileData={setProfileData} />
+        }
+    ]
+    useEffect(() => {
+        setProfileData((profileData: ProfileInterface) => {
+            return {
+                ...profileData,
+                name,
+                title,
+                company,
+                about,
+                profileImage,
+                coverImage,
+                actionButtons
+            }
+        })
+    }, [
+        name,
+        title,
+        company,
+        about,
+        profileImage,
+        coverImage,
+        actionButtons
+    ])
     useEffect(() => {
         (async () => {
-            if (username && user) {
-                setShowLoader(true)
-                const profileData = await getProfileData(username)
-                if (profileData) {
-                    if (profileData.uid !== user.uid) {
-                        toast.error("You are not authorized to edit this profile")
-                        navigate("/profiles")
-                    }
-                    setName(profileData.name || "")
-                    setTitle(profileData.title || "")
-                    setAbout(profileData.about || "")
-                    setEmail(profileData.email || "")
-                    setPhone(profileData.phone || "")
-                    setPhoneCode(profileData.phoneCode || "")
-                    setLocation(profileData.location || "")
-                    setSocials(profileData.socials || [])
-                    setProfileImageUrl(profileData.image || "")
-                    setCoverImageUrl(profileData.coverImage || "")
-                    setCustomButtons(profileData.customButtons || [])
-                }
-                setShowLoader(false)
-            }
-        })()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [username, user])
-    const handleVerifyProfile = () => {
-        let detailsValid = true
-        console.log(phoneCode)
-        // Write Validation Code again
-        return detailsValid
+            setProfileData(await getNewProfileData(username))
+        })();
+    }, [username])
+    const handleChangeTabNext = () => {
+        if(activeTabIndex == TABS.length - 1) {
+            setActiveTab(TABS[0].name)
+            setActiveTabIndex(0)
+        }
+        setActiveTab(TABS[activeTabIndex + 1].name)
+        setActiveTabIndex(activeTabIndex + 1)
     }
-
-    const handleSaveProfile = async () => {
-
-    }
-    const handleSaveSocials = async () => {
-
-    }
-    const handleSaveButtons = async () => {
-
+    const handleChangeTabPrev = () => {
+        if(activeTabIndex == 0) {
+            setActiveTab(TABS[TABS.length - 1].name)
+            setActiveTabIndex(TABS.length - 1)
+        }
+        setActiveTab(TABS[activeTabIndex - 1].name)
+        setActiveTabIndex(activeTabIndex - 1)
     }
     return (
-        <div className='container'>
-            <Grid>
-                <Heading
-                    className="mt-8 mb-3 lg:mb-14 text-neutral-900 dark:text-neutral-50 nc-p-r-container "
-                    desc=""
-                    rightDescText="Let's get you all setup."
-                >
-                    Edit Profile
-                </Heading>
+        <div className='container mt-3'>
+            {profileData && <Grid container spacing={2}>
+                <Grid item xs={12} md={6} lg={8}>
+                    {profileImage}
+                    <Paper elevation={0} className="pt-0 mt-3">
+                        <Nav
+                            className="p-1 bg-white dark:bg-neutral-800 rounded-full w-full shadow-lg overflow-x-auto hiddenScrollbar"
+                            containerClassName="mb-6 lg:mb-6 relative flex  w-full text-sm md:text-base"
+                        >
+                            {TABS.map((item, index) => (
+                                <NavItem2
+                                    key={index}
+                                    isActive={activeTab === item.name}
+                                    onClick={() => {
+                                        setActiveTab(item.name)
+                                        setActiveTabIndex(index)
+                                    }}
+                                >
+                                    <div className="flex items-center justify-center space-x-1.5 sm:space-x-2.5 text-xs sm:text-sm w-100">
+                                        {item.icon}
+                                        <span>{item.name}</span>
+                                    </div>
+                                </NavItem2>
+                            ))}
+                        </Nav>
+                        {profileData && TABS.filter((tab: any) => {
+                            return tab.name == activeTab
+                        })[0].component}
+                        <Stack direction='row' spacing={1} className="mt-12" justifyContent='space-between'>
+                            <Stack direction='row' spacing={1} justifyContent='flex-end'>
+                                <Tooltip title={"Hello"}>
+                                    <ButtonSecondary className="shadow-lg"
+                                        fontSize="text-xs"
+                                        sizeClass="p-3"
+                                        onClick={handleChangeTabPrev}
+                                    >
+                                        <ArrowBackIosNewOutlined fontSize="small" />
+                                    </ButtonSecondary>
+                                </Tooltip>
+                                <Tooltip title={TAB_NAMES[Object.keys(TAB_NAMES)[Object.keys(TAB_NAMES).indexOf(activeTab) + 1]]}>
+                                    <ButtonSecondary className="shadow-lg"
+                                        fontSize="text-xs"
+                                        sizeClass="p-3"
+                                        onClick={handleChangeTabNext}
+                                    >
+                                        <ArrowForwardIosOutlined fontSize="small" />
+                                    </ButtonSecondary>
+                                </Tooltip>
+                            </Stack>
+                            <Stack direction='row' spacing={1} justifyContent='flex-end'>
+                                <ButtonSecondary className="shadow-lg"
+                                    fontSize="text-xs"
+                                    sizeClass="p-3">
+                                    <RestartAltOutlined />
+                                </ButtonSecondary>
+                                <ButtonPrimary className="shadow-lg"
+                                    fontSize="text-xs"
+                                    sizeClass="p-3">
+                                    <SaveOutlined />
+                                </ButtonPrimary>
+                            </Stack>
+                        </Stack>
+                    </Paper>
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                    <DefaultProfileTemplate profileData={profileData} />
+                </Grid>
             </Grid>
-{/* 
-            <Row>
-                {cartItems.map((cartItem: CartItem, index: number) => {
-                    return (
-                        <Col xl="3" lg="6" md="6" key={index}>
-                            <div className={`card ${styles.itemContainer} my-2`}>
-                                <Row className="d-flex align-items-center w-100">
-                                    <h3 className="text-bold">
-                                        {getProduct(cartItem.id || '')?.name}
-                                    </h3>
-                                </Row>
-                                <Row className="mx-0 px-0 w-100">
-                                    <FormGroup>
-                                        <Input
-                                            className="my-2"
-                                            type="select"
-                                            name="profile"
-                                            placeholder="Select Profile"
-                                            onChange={e => { handleAddUsernameToProduct(index, e.target.value) }}
-                                            value={cartItem.username}
-                                        >
-                                            <option value="">Select Profile</option>
-                                            {profiles.map(profile => {
-                                                return <option key={profile.username} value={profile.username}>{profile.username}</option>
-                                            })}
-                                        </Input>
-                                        <div className="color-primary text-small text-bold">
-                                            <button onClick={() => handleOpenProfileModal(index)} className="border-none color-primary mx-0 px-0">
-                                                Create New Profile
-                                            </button>
-                                        </div>
-                                    </FormGroup>
-                                </Row>
-                            </div>
-                        </Col>
-                    )
-                })}
-            </Row>
-            <div className="py-4">
-                <Button text={"Enter Shipping Details"} color="primary" handler={handleMoveToShipping} />
-            </div> */}
+            }
         </div>
     )
 };

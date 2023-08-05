@@ -1,38 +1,16 @@
-.App {
-  text-align: center;
+.dashed-box {
+    background-image: repeating-linear-gradient(0deg, #333333, #333333 12px, transparent 12px, transparent 22px, #333333 22px), repeating-linear-gradient(90deg, #333333, #333333 12px, transparent 12px, transparent 22px, #333333 22px), repeating-linear-gradient(180deg, #333333, #333333 12px, transparent 12px, transparent 22px, #333333 22px), repeating-linear-gradient(270deg, #333333, #333333 12px, transparent 12px, transparent 22px, #333333 22px);
+    background-size: 1px 100%, 100% 1px, 1px 100%, 100% 1px;
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.text-center {
+    text-align: center !important;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.ql-container {
+    border: none !important;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.ql-editor { 
+    height: 300px  !important;
 }

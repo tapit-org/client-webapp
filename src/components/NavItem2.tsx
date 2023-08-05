@@ -19,12 +19,14 @@ const NavItem2: FC<NavItem2Props> = ({
 	renderX,
 }) => {
 	return (
-		<li className="nc-NavItem2 relative" data-nc-id="NavItem2">
+		<li className="nc-NavItem2 relative" data-nc-id="NavItem2" style={{
+            width: '20%'
+        }}>
 			{renderX && renderX}
 			<button
-				className={`block font-medium whitespace-nowrap ${className} ${radius} ${
+				className={`w-100 block font-medium whitespace-nowrap ${className} ${radius} ${
 					isActive
-						? 'bg-slate-900 text-slate-50'
+						? 'bg-primary-900 text-slate-50'
 						: 'text-slate-600 dark:text-slate-400 dark:hover:text-slate-100 hover:text-slate-900 '
 				} ${twFocusClass()}`}
 				onClick={() => {

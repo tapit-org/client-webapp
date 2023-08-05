@@ -35,7 +35,7 @@ const Badge: FC<BadgeProps> = ({ className = 'relative', name, color = 'blue', h
 
 	const CLASSES =
 		'nc-Badge inline-flex px-2.5 py-1 rounded-full font-medium text-xs ' + className;
-	return !!href ? (
+	return href ? (
 		<Link
 			to={href || ''}
 			className={`transition-colors hover:text-white duration-300 ${CLASSES} ${getColorClass()}`}

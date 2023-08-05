@@ -34,7 +34,7 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
 							},
 							{
 								name: 'Profiles',
-								link: '/account/profiles',
+								link: '/profiles',
 							},
 							{
 								name: 'Orders',

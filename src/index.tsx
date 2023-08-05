@@ -4,6 +4,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { store } from 'store';
 import { BrowserRouter } from 'react-router-dom';
 import 'styles/index.scss';
+import 'App.css';
 import 'index.css';
 import 'fonts/line-awesome-1.3.0/css/line-awesome.css';
 import 'rc-slider/assets/index.css';
@@ -14,13 +15,11 @@ import reportWebVitals from 'reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-	<StrictMode>
-		<ReduxProvider store={store}>
-			<BrowserRouter basename="/">
-				<App />
-			</BrowserRouter>
-		</ReduxProvider>
-	</StrictMode>,
+    <ReduxProvider store={store}>
+        <BrowserRouter basename="/">
+            <App />
+        </BrowserRouter>
+    </ReduxProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

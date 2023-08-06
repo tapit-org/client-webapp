@@ -159,7 +159,7 @@ const LoginForm = () => {
 										}
 										label={
 											<span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
-												Keep me sign in
+												Keep me signed in
 											</span>
 										}
 									/>

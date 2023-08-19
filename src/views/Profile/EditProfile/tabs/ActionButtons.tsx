@@ -1,6 +1,7 @@
 import { LanguageOutlined, DragHandleOutlined, PersonOutlined, TitleOutlined, DragIndicatorOutlined, EmailOutlined, PhoneOutlined } from "@mui/icons-material";
 import { Box, FormControlLabel, Grid, Paper, Stack, Switch, Typography, styled } from "@mui/material";
 import DraggableList from "components/DraggableList";
+import { BUTTON_TYPES } from "interfaces/button.interface";
 import { useState } from "react";
 import Input from "shared/Input/Input";
 
@@ -78,7 +79,7 @@ const ActionButtonCard = ({ item, setItem, toggleItem }) => {
                     value={item.text}
                     className="!rounded-l-none"
                     onChange={(e) => setItem(item.id, e.target.value)}
-                    placeholder={"Enter " + item.id}
+                    placeholder={item.id}
                 />
             </div>
             <FormControlLabel
@@ -97,9 +98,9 @@ const ActionButtons = ({
     actionButtons, setActionButtons
 }) => {
     const handleGetLinkFromText = (id: string, text: string) => {
-        if(id == 'email') {
+        if(id == BUTTON_TYPES.EMAIL) {
             return "mailto:" + text
-        } else if(id == 'phone') {
+        } else if(id == BUTTON_TYPES.PHONE) {
             return "tel:" + text
         } else {
             return text

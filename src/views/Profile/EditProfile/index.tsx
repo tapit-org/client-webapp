@@ -15,6 +15,8 @@ import ButtonPrimary from "shared/Button/ButtonPrimary";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
 import ActionButtons from "./tabs/ActionButtons";
 import AboutForm from "./tabs/AboutForm";
+import { BUTTON_TYPES } from "interfaces/button.interface";
+import ProfileForm1 from "./tabs/ProfileForm1";
 
 const TAB_NAMES = {
     PROFILE_DETAILS: 'Profile Details',
@@ -40,21 +42,18 @@ const EditProfile = () => {
     const [coverImage, setCoverImage] = useState("")
     const [actionButtons, setActionButtons] = useState([
         {
-            id: 'website',
+            id: BUTTON_TYPES.WEBSITE,
             enabled: false,
-            text: '',
             link: ''
         },
         {
-            id: 'email',
+            id: BUTTON_TYPES.EMAIL,
             enabled: false,
-            text: '',
             link: ''
         },
         {
-            id: 'phone',
+            id: BUTTON_TYPES.PHONE,
             enabled: false,
-            text: '',
             link: ''
         }
     ])
@@ -62,37 +61,44 @@ const EditProfile = () => {
         {
             name: TAB_NAMES.PROFILE_DETAILS,
             icon: <PersonOutlined fontSize="small" />,
-            component: <ProfileForm 
+            // component: <ProfileForm 
+            //     name={name}
+            //     setName={setName}
+            //     title={title}
+            //     setTitle={setTitle}
+            //     company={company}
+            //     setCompany={setCompany}
+            //  />
+            component: <ProfileForm1
                 name={name}
                 setName={setName}
                 title={title}
                 setTitle={setTitle}
                 company={company}
-                setCompany={setCompany}
-             />
+                setCompany={setCompany} />
         },
         {
             name: TAB_NAMES.IMAGES,
             icon: <ImageOutlined fontSize="small" />,
-            component: <ImagesUploader 
-                profileImage={profileImage} 
-                setProfileImage={setProfileImage} 
-                coverImage={coverImage} 
+            component: <ImagesUploader
+                profileImage={profileImage}
+                setProfileImage={setProfileImage}
+                coverImage={coverImage}
                 setCoverImage={setCoverImage}
             />
         },
         {
             name: TAB_NAMES.ACTION_BUTTONS,
             icon: <AccessibilityNewOutlined fontSize="small" />,
-            component: <ActionButtons 
-                actionButtons={actionButtons} 
+            component: <ActionButtons
+                actionButtons={actionButtons}
                 setActionButtons={setActionButtons}
             />
         },
         {
             name: TAB_NAMES.ABOUT,
             icon: <NotesOutlined fontSize="small" />,
-            component: <AboutForm about={about} setAbout={setAbout}/>
+            component: <AboutForm about={about} setAbout={setAbout} />
         },
         {
             name: TAB_NAMES.SOCIALS,
@@ -128,7 +134,7 @@ const EditProfile = () => {
         })();
     }, [username])
     const handleChangeTabNext = () => {
-        if(activeTabIndex == TABS.length - 1) {
+        if (activeTabIndex == TABS.length - 1) {
             setActiveTab(TABS[0].name)
             setActiveTabIndex(0)
         }
@@ -136,7 +142,7 @@ const EditProfile = () => {
         setActiveTabIndex(activeTabIndex + 1)
     }
     const handleChangeTabPrev = () => {
-        if(activeTabIndex == 0) {
+        if (activeTabIndex == 0) {
             setActiveTab(TABS[TABS.length - 1].name)
             setActiveTabIndex(TABS.length - 1)
         }

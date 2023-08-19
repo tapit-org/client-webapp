@@ -1,4 +1,5 @@
-import { SocialButtonInterface } from "./social.interface";
+import { ButtonInterface } from "./button.interface";
+
 
 export enum PROFILE_TYPES {
     PERSONAL = 'Personal',
@@ -23,7 +24,8 @@ export interface ProfileInterface {
     phoneCode: string | null,
     website: string | null,
     location: string | null,
-    socials: SocialButtonInterface[],
+    actionButtons: ButtonInterface[],
+    socials: ButtonInterface[],
     about: string | null,
     selectedDesign: PROFILE_TYPES,
     profileImage: string | null,

@@ -1,5 +1,5 @@
+import { BUTTON_TYPES } from "interfaces/button.interface";
 import { PROFILE_TYPES, ProfileCardInterface, ProfileInterface } from "interfaces/profile.interface";
-import { SOCIAL_TYPES } from "interfaces/social.interface";
 
 export const getProfileCardList = async () => {
     // Axios call to backend
@@ -39,21 +39,37 @@ export const getProfileData = async (username: string) => {
         phoneCode: "91",
         website: "https://abhiyantran.webflow.io/",
         location: "Mysuru | Bengaluru",
+        actionButtons: [
+            {
+                id: BUTTON_TYPES.EMAIL,
+                enabled: true,
+                link: "https://mui.com/",
+            },
+            {
+                id: BUTTON_TYPES.PHONE,
+                enabled: false,
+                link: "https://mui.com/",
+            }
+        ],
         socials: [
             {
-                name: SOCIAL_TYPES.FACEBOOK,
+                id: BUTTON_TYPES.FACEBOOK,
+                enabled: true,
                 link: "https://mui.com/",
             },
             {
-                name: SOCIAL_TYPES.WHATSAPP,
+                id: BUTTON_TYPES.WHATSAPP,
+                enabled: true,
                 link: "https://mui.com/",
             },
             {
-                name: SOCIAL_TYPES.TWITTER,
+                id: BUTTON_TYPES.TWITTER,
+                enabled: true,
                 link: "https://mui.com/",
             },
             {
-                name: SOCIAL_TYPES.VIMEO,
+                id: BUTTON_TYPES.VIMEO,
+                enabled: true,
                 link: "https://mui.com/",
             }
         ],
@@ -79,6 +95,7 @@ export const getNewProfileData = async (username: string) => {
         website: null,
         location: null,
         socials: [],
+        actionButtons: [],
         about: null,
         selectedDesign: PROFILE_TYPES.PROFESSIONAL,
         profileImage: null,

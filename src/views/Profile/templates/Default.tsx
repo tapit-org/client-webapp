@@ -1,16 +1,16 @@
 import { Box, Grid, Stack, Tooltip, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { DownloadOutlined, EmailOutlined, LanguageOutlined, LocationOnOutlined, PhoneOutlined, ShareOutlined } from '@mui/icons-material';
-import { SocialButtonInterface } from 'interfaces/social.interface';
+import { ButtonInterface } from 'interfaces/button.interface';
 import SocialIcon from 'views/Profile/components/SocialIcon';
 import NcImage from 'shared/NcImage/NcImage';
 const ACTION_ICONS = {
-    website: <LanguageOutlined fontSize="small" />,
-    email: <EmailOutlined fontSize="small" />,
-    phone: <PhoneOutlined fontSize="small" />,
+    WEBSITE: <LanguageOutlined fontSize="small" />,
+    EMAIL: <EmailOutlined fontSize="small" />,
+    PHONE: <PhoneOutlined fontSize="small" />,
 }
 const DefaultProfileTemplate = ({ profileData }) => {
-    const renderSocials = (socials: SocialButtonInterface[]) => {
+    const renderSocials = (socials: ButtonInterface[]) => {
         return (
             <div>
                 <Stack
@@ -27,7 +27,7 @@ const DefaultProfileTemplate = ({ profileData }) => {
                             key={index}
                             to={item.link}
                         >
-                            <SocialIcon type={item.name} />
+                            <SocialIcon type={item.id} />
                         </Link>
                     ))}
                 </Stack>
@@ -84,36 +84,16 @@ const DefaultProfileTemplate = ({ profileData }) => {
                                             </Link>
                                         </Tooltip>
                                     )}
-                                    {profileData.website && <Tooltip title="Website" >
-                                        <Link to={profileData.website} className='my-2'>
-                                            <LanguageOutlined />
-                                        </Link>
-                                    </Tooltip>}
-                                    {profileData.phone && <Tooltip title="Phone">
-                                        <Link to={profileData.phone} className='my-2'>
-                                            <PhoneOutlined />
-                                        </Link>
-                                    </Tooltip>}
-                                    {profileData.email && <Tooltip title="Email">
-                                        <Link to={profileData.email} className='my-2'>
-                                            <EmailOutlined />
-                                        </Link>
-                                    </Tooltip>}
-                                    {profileData.location && <Tooltip title="Location">
-                                        <Link to={profileData.location} className='my-2'>
-                                            <LocationOnOutlined />
-                                        </Link>
-                                    </Tooltip>}
-                                    {profileData.download && <Tooltip title="Save">
+                                    <Tooltip title="Save">
                                         <Link to={profileData.download} className='my-2'>
-                                            <DownloadOutlined />
+                                            <DownloadOutlined fontSize="small" />
                                         </Link>
-                                    </Tooltip>}
-                                    {profileData.share && <Tooltip title="Share">
+                                    </Tooltip>
+                                    <Tooltip title="Share">
                                         <Link to={profileData.share} className='my-2'>
-                                            <ShareOutlined />
+                                            <ShareOutlined fontSize="small" />
                                         </Link>
-                                    </Tooltip>}
+                                    </Tooltip>
                                 </Stack>
                                 {profileData.about && <div className='m-3'>
                                     <p className="text-center text-sm" dangerouslySetInnerHTML={{__html: profileData.about}}></p>

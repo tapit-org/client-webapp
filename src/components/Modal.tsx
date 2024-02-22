@@ -1,17 +1,34 @@
-import { Dialog, Transition } from '@headlessui/react';
-import { FC, Fragment } from 'react';
-import ButtonClose from 'shared/ButtonClose/ButtonClose';
+import { Dialog, Transition } from "@headlessui/react";
+import { Stack, Typography } from "@mui/material";
+import { FC, Fragment } from "react";
+import ButtonClose from "shared/ButtonClose/ButtonClose";
 
 export interface ModalQuickViewProps {
 	show: boolean;
 	onCloseModalQuickView: () => void;
-    children: any
+	children: any;
+	title?: string;
+	position?: string;
+	hideClose?: boolean;
+	padding?: number;
 }
 
-const Modal: FC<ModalQuickViewProps> = ({ show, onCloseModalQuickView, children }) => {
+const Modal: FC<ModalQuickViewProps> = ({
+	show,
+	onCloseModalQuickView,
+	children,
+	title = "",
+	position = "center",
+	hideClose = false,
+	padding = 8,
+}) => {
 	return (
 		<Transition appear show={show} as={Fragment}>
-			<Dialog as="div" className="fixed inset-0 z-50" onClose={onCloseModalQuickView}>
+			<Dialog
+				as="div"
+				className="fixed inset-0 z-50"
+				onClose={onCloseModalQuickView}
+			>
 				<div className="flex items-stretch md:items-center justify-center h-full text-center md:px-4">
 					<Transition.Child
 						as={Fragment}
@@ -26,7 +43,10 @@ const Modal: FC<ModalQuickViewProps> = ({ show, onCloseModalQuickView, children 
 					</Transition.Child>
 
 					{/* This element is to trick the browser into centering the modal contents. */}
-					<span className="inline-block align-middle" aria-hidden="true">
+					<span
+						className="inline-block align-middle"
+						aria-hidden="true"
+					>
 						&#8203;
 					</span>
 					<Transition.Child
@@ -38,18 +58,37 @@ const Modal: FC<ModalQuickViewProps> = ({ show, onCloseModalQuickView, children 
 						leaveFrom="opacity-100 scale-100"
 						leaveTo="opacity-0 scale-95"
 					>
-						<div className="relative inline-flex xl:py-8 w-full max-w-5xl max-h-full">
+						<div
+							className="relative inline-flex xl:py-8 w-full max-w-5xl max-h-full px-3 "
+							style={
+								position == "bottom"
+									? {
+											position: "fixed",
+											bottom: 0,
+									  }
+									: {}
+							}
+						>
 							<div
-								className="flex-1 flex overflow-hidden max-h-full p-8 w-full text-left align-middle transition-all transform lg:rounded-2xl bg-white 
-              dark:bg-neutral-900 dark:border dark:border-slate-700 dark:text-slate-100 shadow-xl"
+								className={`max-h-full p-${padding} w-full text-left align-middle transition-all transform lg:rounded-2xl bg-white 
+              dark:bg-neutral-900 dark:border dark:border-slate-700 dark:text-slate-100 shadow-xl rounded-xl`}
 							>
-								<span className="absolute right-3 top-3 z-50">
-									<ButtonClose onClick={onCloseModalQuickView} />
-								</span>
-
-								<div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
-									{children}
-								</div>
+								<Stack
+									width={"100%"}
+									direction={"row"}
+									justifyContent={"space-between"}
+									alignItems={"center"}
+								>
+									<Typography variant="h6">
+										{title}
+									</Typography>
+									{!hideClose && (
+										<ButtonClose
+											onClick={onCloseModalQuickView}
+										/>
+									)}
+								</Stack>
+								{children}
 							</div>
 						</div>
 					</Transition.Child>

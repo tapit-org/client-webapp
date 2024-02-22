@@ -1,220 +1,309 @@
-import { AccessibilityNewOutlined, ArrowBackIosNewOutlined, ArrowForwardIosOutlined, BusinessOutlined, EmailOutlined, ImageOutlined, LinkOutlined, NotesOutlined, PersonOutlined, ResetTvOutlined, RestartAltOutlined, SaveOutlined, TitleOutlined } from "@mui/icons-material";
-import { Box, Grid, Paper, Stack, Tooltip, Typography } from "@mui/material";
-import { ProfileInterface } from "interfaces/profile.interface";
+import {
+	AccessibilityNewOutlined,
+	AlternateEmail,
+	ArrowBackIosNewOutlined,
+	ArrowForwardIosOutlined,
+	BusinessOutlined,
+	EmailOutlined,
+	ImageOutlined,
+	LinkOutlined,
+	NotesOutlined,
+	PersonOutlined,
+	RemoveRedEye,
+	ResetTvOutlined,
+	RestartAltOutlined,
+	SaveOutlined,
+	TitleOutlined,
+} from "@mui/icons-material";
+import {
+	Box,
+	CircularProgress,
+	Grid,
+	Paper,
+	Stack,
+	Tooltip,
+	Typography,
+} from "@mui/material";
+import {
+	CONTACT_BUTTON_TYPES,
+	PROFILE_STATUS,
+	PROFILE_THEMES,
+	ProfileInterface,
+} from "interfaces/profile.interface";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getNewProfileData } from "services/profile.service";
+import { getProfile, updateProfile } from "services/profile.service";
 import Input from "shared/Input/Input";
 import DefaultProfileTemplate from "../templates/Default";
 import Nav from "shared/Nav/Nav";
 import NavItem2 from "components/NavItem2";
 import Textarea from "shared/Textarea/Textarea";
 import ProfileForm from "./tabs/ProfileForm";
-import ImagesUploader from "./tabs/ImagesUploader";
+import Images from "./tabs/Images";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
-import ActionButtons from "./tabs/ActionButtons";
+import ContactButtons from "./tabs/ContactButtons";
 import AboutForm from "./tabs/AboutForm";
-
+import { useMediaQuery } from "react-responsive";
+import Socials from "./tabs/Socials";
+import { SocialButtonInterface } from "interfaces/social.interface";
+import Modal from "components/Modal";
 const TAB_NAMES = {
-    PROFILE_DETAILS: 'Profile Details',
-    IMAGES: 'Images',
-    ACTION_BUTTONS: 'Action Buttons',
-    ABOUT: 'About',
-    SOCIALS: 'Socials'
-}
-
-
+	PROFILE_DETAILS: "Profile",
+	IMAGES: "Images",
+	CONTACT_BUTTONS: "Links",
+	ABOUT: "About",
+	SOCIALS: "Socials",
+};
 
 const EditProfile = () => {
-    const { username } = useParams()
-    const [profileData, setProfileData] = useState(null as ProfileInterface)
-    const [activeTab, setActiveTab] = useState(TAB_NAMES.PROFILE_DETAILS);
-    const [activeTabIndex, setActiveTabIndex] = useState(0)
+	const isDesktop = useMediaQuery({ minWidth: 992 });
 
-    const [name, setName] = useState("")
-    const [title, setTitle] = useState("")
-    const [company, setCompany] = useState("")
-    const [about, setAbout] = useState("")
-    const [profileImage, setProfileImage] = useState("")
-    const [coverImage, setCoverImage] = useState("")
-    const [actionButtons, setActionButtons] = useState([
-        {
-            id: 'website',
-            enabled: false,
-            text: '',
-            link: ''
-        },
-        {
-            id: 'email',
-            enabled: false,
-            text: '',
-            link: ''
-        },
-        {
-            id: 'phone',
-            enabled: false,
-            text: '',
-            link: ''
-        }
-    ])
-    const TABS = [
-        {
-            name: TAB_NAMES.PROFILE_DETAILS,
-            icon: <PersonOutlined fontSize="small" />,
-            component: <ProfileForm 
-                name={name}
-                setName={setName}
-                title={title}
-                setTitle={setTitle}
-                company={company}
-                setCompany={setCompany}
-             />
-        },
-        {
-            name: TAB_NAMES.IMAGES,
-            icon: <ImageOutlined fontSize="small" />,
-            component: <ImagesUploader 
-                profileImage={profileImage} 
-                setProfileImage={setProfileImage} 
-                coverImage={coverImage} 
-                setCoverImage={setCoverImage}
-            />
-        },
-        {
-            name: TAB_NAMES.ACTION_BUTTONS,
-            icon: <AccessibilityNewOutlined fontSize="small" />,
-            component: <ActionButtons 
-                actionButtons={actionButtons} 
-                setActionButtons={setActionButtons}
-            />
-        },
-        {
-            name: TAB_NAMES.ABOUT,
-            icon: <NotesOutlined fontSize="small" />,
-            component: <AboutForm about={about} setAbout={setAbout}/>
-        },
-        {
-            name: TAB_NAMES.SOCIALS,
-            icon: <LinkOutlined fontSize="small" />,
-            // component: <ImagesUploader profileData={profileData} setProfileData={setProfileData} />
-        }
-    ]
-    useEffect(() => {
-        setProfileData((profileData: ProfileInterface) => {
-            return {
-                ...profileData,
-                name,
-                title,
-                company,
-                about,
-                profileImage,
-                coverImage,
-                actionButtons
-            }
-        })
-    }, [
-        name,
-        title,
-        company,
-        about,
-        profileImage,
-        coverImage,
-        actionButtons
-    ])
-    useEffect(() => {
-        (async () => {
-            setProfileData(await getNewProfileData(username))
-        })();
-    }, [username])
-    const handleChangeTabNext = () => {
-        if(activeTabIndex == TABS.length - 1) {
-            setActiveTab(TABS[0].name)
-            setActiveTabIndex(0)
-        }
-        setActiveTab(TABS[activeTabIndex + 1].name)
-        setActiveTabIndex(activeTabIndex + 1)
-    }
-    const handleChangeTabPrev = () => {
-        if(activeTabIndex == 0) {
-            setActiveTab(TABS[TABS.length - 1].name)
-            setActiveTabIndex(TABS.length - 1)
-        }
-        setActiveTab(TABS[activeTabIndex - 1].name)
-        setActiveTabIndex(activeTabIndex - 1)
-    }
-    return (
-        <div className='container mt-3'>
-            {profileData && <Grid container spacing={2}>
-                <Grid item xs={12} md={6} lg={8}>
-                    {profileImage}
-                    <Paper elevation={0} className="pt-0 mt-3">
-                        <Nav
-                            className="p-1 bg-white dark:bg-neutral-800 rounded-full w-full shadow-lg overflow-x-auto hiddenScrollbar"
-                            containerClassName="mb-6 lg:mb-6 relative flex  w-full text-sm md:text-base"
-                        >
-                            {TABS.map((item, index) => (
-                                <NavItem2
-                                    key={index}
-                                    isActive={activeTab === item.name}
-                                    onClick={() => {
-                                        setActiveTab(item.name)
-                                        setActiveTabIndex(index)
-                                    }}
-                                >
-                                    <div className="flex items-center justify-center space-x-1.5 sm:space-x-2.5 text-xs sm:text-sm w-100">
-                                        {item.icon}
-                                        <span>{item.name}</span>
-                                    </div>
-                                </NavItem2>
-                            ))}
-                        </Nav>
-                        {profileData && TABS.filter((tab: any) => {
-                            return tab.name == activeTab
-                        })[0].component}
-                        <Stack direction='row' spacing={1} className="mt-12" justifyContent='space-between'>
-                            <Stack direction='row' spacing={1} justifyContent='flex-end'>
-                                <Tooltip title={"Hello"}>
-                                    <ButtonSecondary className="shadow-lg"
-                                        fontSize="text-xs"
-                                        sizeClass="p-3"
-                                        onClick={handleChangeTabPrev}
-                                    >
-                                        <ArrowBackIosNewOutlined fontSize="small" />
-                                    </ButtonSecondary>
-                                </Tooltip>
-                                <Tooltip title={TAB_NAMES[Object.keys(TAB_NAMES)[Object.keys(TAB_NAMES).indexOf(activeTab) + 1]]}>
-                                    <ButtonSecondary className="shadow-lg"
-                                        fontSize="text-xs"
-                                        sizeClass="p-3"
-                                        onClick={handleChangeTabNext}
-                                    >
-                                        <ArrowForwardIosOutlined fontSize="small" />
-                                    </ButtonSecondary>
-                                </Tooltip>
-                            </Stack>
-                            <Stack direction='row' spacing={1} justifyContent='flex-end'>
-                                <ButtonSecondary className="shadow-lg"
-                                    fontSize="text-xs"
-                                    sizeClass="p-3">
-                                    <RestartAltOutlined />
-                                </ButtonSecondary>
-                                <ButtonPrimary className="shadow-lg"
-                                    fontSize="text-xs"
-                                    sizeClass="p-3">
-                                    <SaveOutlined />
-                                </ButtonPrimary>
-                            </Stack>
-                        </Stack>
-                    </Paper>
-                </Grid>
-                <Grid item xs={12} md={6} lg={4}>
-                    <DefaultProfileTemplate profileData={profileData} />
-                </Grid>
-            </Grid>
-            }
-        </div>
-    )
+	const { profileId } = useParams();
+	const [profileData, setProfileData] = useState<ProfileInterface>();
+	const [updatedProfileData, setUpdatedProfileData] =
+		useState<ProfileInterface>();
+	const [activeTab, setActiveTab] = useState(TAB_NAMES.PROFILE_DETAILS);
+	const [activeTabIndex, setActiveTabIndex] = useState(0);
+	const [showPreview, setShowPreview] = useState(isDesktop);
+	const [showLoader, setShowLoader] = useState(true);
+	const [name, setName] = useState("");
+	const [title, setTitle] = useState("");
+	const [company, setCompany] = useState("");
+	const [about, setAbout] = useState("");
+	const [profileImage, setProfileImage] = useState("");
+	const [coverImage, setCoverImage] = useState("");
+	const [socials, setSocials] = useState<SocialButtonInterface[]>([]);
+	const [contactButtons, setContactButtons] = useState([
+		{
+			id: CONTACT_BUTTON_TYPES.EMAIL,
+			enabled: false,
+			link: "",
+		},
+		{
+			id: CONTACT_BUTTON_TYPES.PHONE,
+			enabled: false,
+			link: "",
+		},
+		{
+			id: CONTACT_BUTTON_TYPES.WEBSITE,
+			enabled: false,
+			link: "",
+		},
+	]);
+	const TABS = [
+		{
+			name: TAB_NAMES.PROFILE_DETAILS,
+			icon: <PersonOutlined fontSize="small" />,
+			component: (
+				<>
+					<ProfileForm
+						name={name}
+						setName={setName}
+						title={title}
+						setTitle={setTitle}
+						company={company}
+						setCompany={setCompany}
+					/>
+					<AboutForm about={about} setAbout={setAbout} />
+				</>
+			),
+		},
+		{
+			name: TAB_NAMES.IMAGES,
+			icon: <ImageOutlined fontSize="small" />,
+			component: (
+				<Images
+					profileImage={profileImage}
+					setProfileImage={setProfileImage}
+					coverImage={coverImage}
+					setCoverImage={setCoverImage}
+				/>
+			),
+		},
+		{
+			name: TAB_NAMES.CONTACT_BUTTONS,
+			icon: <AlternateEmail fontSize="small" />,
+			component: (
+				<>
+					<ContactButtons
+						contactButtons={contactButtons}
+						setContactButtons={setContactButtons}
+					/>
+					<Socials socials={socials} setSocials={setSocials} />
+				</>
+			),
+		},
+	];
+
+	useEffect(() => {
+		(async () => {
+			setShowLoader(true);
+			const response = await getProfile(profileId);
+			setProfileData(response);
+			initProfileProperties(response);
+			setShowLoader(false);
+		})();
+	}, [profileId]);
+	const initProfileProperties = (profileData: ProfileInterface) => {
+		setName(profileData.name);
+		setTitle(profileData.title);
+		setCompany(profileData.company);
+		setAbout(profileData.about);
+		setProfileImage(profileData.profileImage);
+		setCoverImage(profileData.coverImage);
+		setContactButtons(profileData.contactButtons);
+		setAbout(profileData.about);
+	};
+	const handleViewPreview = () => {
+		setShowPreview(true);
+	};
+	const handleResetToSaved = () => {
+		setUpdatedProfileData(profileData);
+		initProfileProperties(profileData);
+	};
+	const handleUpdateProfile = async () => {
+		console.log(updatedProfileData);
+		console.log(name, title);
+		const newProfileData: ProfileInterface = {
+			uid: profileData.uid,
+			profileId: profileData.profileId,
+			status: PROFILE_STATUS.ACTIVE,
+			name,
+			title,
+			company,
+			socials: [],
+			contactButtons: contactButtons,
+			about,
+			theme: PROFILE_THEMES.DEFAULT,
+			profileImage: profileImage,
+			coverImage: coverImage,
+		};
+		console.log(newProfileData);
+		setShowLoader(true);
+		const response = await updateProfile(newProfileData);
+		console.log(response);
+		setShowLoader(false);
+	};
+	if (showLoader)
+		return (
+			<Stack
+				alignItems={"center"}
+				justifyContent={"center"}
+				sx={{ height: `calc(100vh - 100px)` }}
+			>
+				<CircularProgress />
+			</Stack>
+		);
+	return (
+		<div className="container mt-3">
+			<Grid container spacing={2}>
+				<Grid item xs={12} md={6} lg={8}>
+					<Paper elevation={1} className="p-4 mt-3">
+						<Stack spacing={1}>
+							<Nav
+								className="p-1 bg-white dark:bg-neutral-800 rounded-full w-full shadow-lg overflow-x-auto hiddenScrollbar"
+								containerClassName="mb-6 lg:mb-6 relative flex  w-full text-sm md:text-base"
+							>
+								<Grid container>
+									{TABS.map((item, index) => (
+										<Grid item key={index} xs={4}>
+											<NavItem2
+												isActive={
+													activeTab === item.name
+												}
+												onClick={() => {
+													setActiveTab(item.name);
+													setActiveTabIndex(index);
+												}}
+											>
+												<Stack
+													direction={"row"}
+													spacing={1}
+													textAlign={"center"}
+													justifyContent={"center"}
+													sx={{ px: 1 }}
+												>
+													{item.icon}
+													<span>{item.name}</span>
+												</Stack>
+											</NavItem2>
+										</Grid>
+									))}
+								</Grid>
+							</Nav>
+							{
+								TABS.find((tab: any) => {
+									return tab.name == activeTab;
+								}).component
+							}
+							<Stack
+								direction="row"
+								spacing={1}
+								className="mt-12"
+								justifyContent="space-between"
+							>
+								<Stack
+									direction="row"
+									spacing={1}
+									justifyContent="flex-end"
+								>
+									<ButtonSecondary
+										className="shadow-lg"
+										fontSize="text-xs"
+										sizeClass="p-3"
+										onClick={handleResetToSaved}
+									>
+										<RestartAltOutlined />
+									</ButtonSecondary>
+								</Stack>
+								<Stack
+									direction="row"
+									spacing={1}
+									justifyContent="flex-end"
+								>
+									{!isDesktop && (
+										<ButtonSecondary
+											className="shadow-lg"
+											fontSize="text-xs"
+											sizeClass="p-3"
+											onClick={handleViewPreview}
+										>
+											<RemoveRedEye fontSize="small" />
+										</ButtonSecondary>
+									)}
+									<ButtonPrimary
+										className="shadow-lg"
+										fontSize="text-xs"
+										sizeClass="p-3"
+										onClick={handleUpdateProfile}
+									>
+										<SaveOutlined />
+									</ButtonPrimary>
+								</Stack>
+							</Stack>
+						</Stack>
+					</Paper>
+				</Grid>
+				<Modal
+					show={showPreview}
+					onCloseModalQuickView={() => setShowPreview(false)}
+					position="bottom"
+					padding={2}
+				>
+					<DefaultProfileTemplate
+						name={name}
+						title={title}
+						company={company}
+						about={about}
+						profileImage={profileImage}
+						coverImage={coverImage}
+						contactButtons={contactButtons}
+					/>
+				</Modal>
+			</Grid>
+		</div>
+	);
 };
 
 export default EditProfile;

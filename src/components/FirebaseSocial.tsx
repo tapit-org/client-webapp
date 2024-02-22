@@ -1,49 +1,63 @@
 // material-ui
-import { Button, Stack } from '@mui/material';
+import { Button, Stack } from "@mui/material";
 
 // assets
-import googleSvg from 'images/Google.svg';
+import googleSvg from "images/Google.svg";
 
-import { auth } from 'firebaseConfig';
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import toast from 'react-hot-toast';
-import { useState } from 'react';
-import useLoader from 'hooks/useLoader';
+import { auth } from "firebaseConfig";
+import {
+	signInWithPopup,
+	GoogleAuthProvider,
+	User,
+	deleteUser,
+} from "firebase/auth";
+import toast from "react-hot-toast";
+import { useState } from "react";
+import useLoader from "hooks/useLoader";
+import useBoolState from "hooks/useBoolState";
+import { createUser, getUser } from "services/auth.service";
+import { dispatch } from "store";
+import { UserInterface } from "interfaces/user.interface";
+import { useNavigate } from "react-router-dom";
+import OverlayLoader from "components/OverlayLoader";
 // ==============================|| FIREBASE - SOCIAL BUTTON ||============================== //
 
 const provider = new GoogleAuthProvider();
 const FirebaseSocial = () => {
+	const navigate = useNavigate();
 	const [showLoader, setShowLoader] = useState(false);
-	useLoader('google_login', showLoader);
 	const googleHandler = async () => {
 		try {
 			setShowLoader(true);
-			await signInWithPopup(auth, provider);
-			setShowLoader(false);
-		} catch (err) {
-			if (err.code === 'auth/invalid-email') {
-				toast.error('Please enter a valid email');
-			} else if (err.code === 'auth/email-already-in-use') {
-				toast.error('Email already in use');
-			} else if (err.code === 'auth/weak-password') {
-				toast.error('Password should be minimum 6 characters');
-			} else {
-				toast.error('Something went wrong');
+			const firebaseRespose = await signInWithPopup(auth, provider);
+			const accessToken = await firebaseRespose.user.getIdToken();
+			localStorage.setItem("access_token", accessToken);
+			let user: UserInterface = await getUser();
+			if (!user) {
+				user = await createUser(dispatch, firebaseRespose.user);
 			}
+			setShowLoader(false);
+			navigate("/");
+		} catch (err) {
+			toast.error("Something went wrong");
 			setShowLoader(false);
 		}
 	};
 
 	return (
-		<Stack direction="row" sx={{ '& .MuiButton-startIcon': { mr: 1, ml: -0.5 } }}>
+		<Stack direction="row">
+			{showLoader && <OverlayLoader />}
 			<Button
+				className="border-2 border-primary-500"
 				variant="outlined"
-				color="secondary"
+				color="primary"
 				fullWidth
-				startIcon={<img src={googleSvg} alt="Google" />}
+				startIcon={
+					<img className="mx-2" src={googleSvg} alt="Google" />
+				}
 				onClick={googleHandler}
 			>
-				Google
+				Continue with Google
 			</Button>
 		</Stack>
 	);

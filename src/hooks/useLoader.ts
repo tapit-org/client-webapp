@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { addLoader, removeLoader } from 'store/reducers/loaders';
-const useLoader = (id, bool, type = 'icon', text = 'Loading...') => {
+const useLoader = (id: string, bool: boolean, type = 'icon', text = 'Loading...') => {
 	const dispatch = useDispatch();
 	useEffect(() => {
 		if (bool) {
@@ -14,6 +14,7 @@ const useLoader = (id, bool, type = 'icon', text = 'Loading...') => {
 				}),
 			);
 		} else {
+            console.log("removing Loader")
 			dispatch(removeLoader(id));
 		}
 	}, [bool]);

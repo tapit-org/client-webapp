@@ -15,6 +15,10 @@ export const loaders = createSlice({
 			};
 		},
 		removeLoader: (state, action) => {
+            console.log({
+				...state,
+				loaders: [...state.loaders].filter((loader) => loader.id != action.payload),
+			})
 			return {
 				...state,
 				loaders: [...state.loaders].filter((loader) => loader.id != action.payload),

@@ -1,4 +1,4 @@
-import { Popover, Transition } from '@headlessui/react';
+import { Popover, Transition } from "@headlessui/react";
 import {
 	AccountCircleOutlined,
 	BadgeOutlined,
@@ -10,11 +10,11 @@ import {
 	ShoppingBagOutlined,
 	ShoppingBagRounded,
 	ShoppingBagSharp,
-} from '@mui/icons-material';
-import { Fragment } from 'react';
-import { Link } from 'react-router-dom';
-import Avatar from 'shared/Avatar/Avatar';
-import SwitchDarkMode2 from 'shared/SwitchDarkMode/SwitchDarkMode2';
+} from "@mui/icons-material";
+import { Fragment } from "react";
+import { Link } from "react-router-dom";
+import Avatar from "shared/Avatar/Avatar";
+import SwitchDarkMode2 from "shared/SwitchDarkMode/SwitchDarkMode2";
 
 export default function AvatarDropdown({ user, handleLogout }) {
 	return (
@@ -67,8 +67,12 @@ export default function AvatarDropdown({ user, handleLogout }) {
 											/>
 
 											<div className="flex-grow">
-												<h4 className="font-semibold">{user.name}</h4>
-												<p className="text-xs mt-0.5">{user.email}</p>
+												<h4 className="font-semibold">
+													{user.name}
+												</h4>
+												<p className="text-xs mt-0.5">
+													{user.email}
+												</p>
 											</div>
 										</div>
 
@@ -76,7 +80,7 @@ export default function AvatarDropdown({ user, handleLogout }) {
 
 										{/* ------------------ 1 --------------------- */}
 										<Link
-											to={'/account'}
+											to={"/account"}
 											className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
 											onClick={() => close()}
 										>
@@ -84,13 +88,15 @@ export default function AvatarDropdown({ user, handleLogout }) {
 												<AccountCircleOutlined />
 											</div>
 											<div className="ml-4">
-												<p className="text-sm font-medium ">My Account</p>
+												<p className="text-sm font-medium ">
+													My Account
+												</p>
 											</div>
 										</Link>
 
 										{/* ------------------ 2 --------------------- */}
 										<Link
-											to={'/checkout'}
+											to={"/orders"}
 											className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
 											onClick={() => close()}
 										>
@@ -98,13 +104,15 @@ export default function AvatarDropdown({ user, handleLogout }) {
 												<ShoppingBagOutlined />
 											</div>
 											<div className="ml-4">
-												<p className="text-sm font-medium ">Orders</p>
+												<p className="text-sm font-medium ">
+													Orders
+												</p>
 											</div>
 										</Link>
 
 										{/* ------------------ 2 --------------------- */}
 										<Link
-											to={'/profiles'}
+											to={"/profiles"}
 											className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
 											onClick={() => close()}
 										>
@@ -112,7 +120,9 @@ export default function AvatarDropdown({ user, handleLogout }) {
 												<BadgeOutlined />
 											</div>
 											<div className="ml-4">
-												<p className="text-sm font-medium ">Profiles</p>
+												<p className="text-sm font-medium ">
+													Profiles
+												</p>
 											</div>
 										</Link>
 
@@ -135,7 +145,7 @@ export default function AvatarDropdown({ user, handleLogout }) {
 
 										{/* ------------------ 2 --------------------- */}
 										<Link
-											to={'/#'}
+											to={"/#"}
 											className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
 											onClick={() => close()}
 										>
@@ -143,13 +153,15 @@ export default function AvatarDropdown({ user, handleLogout }) {
 												<HelpOutlineOutlined />
 											</div>
 											<div className="ml-4">
-												<p className="text-sm font-medium ">Help</p>
+												<p className="text-sm font-medium ">
+													Help
+												</p>
 											</div>
 										</Link>
 
 										{/* ------------------ 2 --------------------- */}
 										<Link
-											to={'/#'}
+											to={"/#"}
 											className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
 											onClick={() => handleLogout(close)}
 										>
@@ -157,7 +169,9 @@ export default function AvatarDropdown({ user, handleLogout }) {
 												<ExitToAppOutlined />
 											</div>
 											<div className="ml-4">
-												<p className="text-sm font-medium ">Log out</p>
+												<p className="text-sm font-medium ">
+													Log out
+												</p>
 											</div>
 										</Link>
 									</div>

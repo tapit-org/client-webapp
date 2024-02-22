@@ -1,9 +1,9 @@
-import { Dialog, Transition } from '@headlessui/react';
-import { StarIcon } from '@heroicons/react/24/solid';
-import ReviewItem from 'components/ReviewItem';
-import SortOrderFilter from 'components/SortOrderFilter';
-import React, { FC, Fragment } from 'react';
-import ButtonClose from 'shared/ButtonClose/ButtonClose';
+import { Dialog, Transition } from "@headlessui/react";
+import { StarIcon } from "@heroicons/react/24/solid";
+import ReviewItem from "components/ReviewItem";
+import SortOrderFilter from "components/SortOrderFilter";
+import React, { FC, Fragment } from "react";
+import ButtonClose from "shared/ButtonClose/ButtonClose";
 
 export interface ModalViewAllReviewsProps {
 	show: boolean;
@@ -35,7 +35,10 @@ const ModalViewAllReviews: FC<ModalViewAllReviewsProps> = ({
 					</Transition.Child>
 
 					{/* This element is to trick the browser into centering the modal contents. */}
-					<span className="inline-block h-screen align-middle" aria-hidden="true">
+					<span
+						className="inline-block h-screen align-middle"
+						aria-hidden="true"
+					>
 						&#8203;
 					</span>
 					<Transition.Child
@@ -57,21 +60,26 @@ const ModalViewAllReviews: FC<ModalViewAllReviewsProps> = ({
 										View all reviews
 									</h3>
 									<span className="absolute left-3 top-3">
-										<ButtonClose onClick={onCloseModalViewAllReviews} />
+										<ButtonClose
+											onClick={onCloseModalViewAllReviews}
+										/>
 									</span>
 								</div>
 								<div className="px-8 my-5 flex justify-between flex-wrap">
 									<h2 className="text-xl sm:text-2xl font-semibold flex items-center">
 										<StarIcon className="w-7 h-7 mb-0.5" />
-										<span className="ml-1.5"> 4,87 · 142 Reviews</span>
+										<span className="ml-1.5">
+											{" "}
+											4,87 · 142 Reviews
+										</span>
 									</h2>
 									<SortOrderFilter
 										className="my-2"
 										data={[
-											{ name: 'Sort order' },
-											{ name: 'Newest rating' },
-											{ name: 'Highest rating' },
-											{ name: 'Lowest rating' },
+											{ name: "Sort order" },
+											{ name: "Newest rating" },
+											{ name: "Highest rating" },
+											{ name: "Lowest rating" },
 										]}
 									/>
 								</div>

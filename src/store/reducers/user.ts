@@ -1,42 +1,56 @@
 // types
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 // initial state
 const initialState = {
 	uid: null,
 	name: null,
 	email: null,
-	image: null,
-	type: null,
-	active: null,
+	emailVerified: false,
+	phoneNumber: null,
+	createdAt: null,
+	lastLoginAt: null,
+	provider: null,
+	loading: true,
+	creating: false,
 };
 
 // ==============================|| SLICE - MENU ||============================== //
 
 const user = createSlice({
-	name: 'user',
+	name: "user",
 	initialState,
 	reducers: {
+		initUser: (state) => {
+			return {
+				...state,
+				loading: true,
+			};
+		},
 		setUser: (state, action) => {
 			return {
 				...state,
-				uid: action.payload.uid,
-				name: action.payload.name,
-				email: action.payload.email,
-				image: action.payload.displayImage,
-				type: action.payload.type,
-				active: action.payload.active,
+				...action.payload,
+				loading: false,
 			};
 		},
 		removeUser: (state) => {
 			return {
+				...initialState,
+				loading: false,
+			};
+		},
+		startCreatingUser: (state) => {
+			return {
 				...state,
-				uid: null,
-				name: null,
-				email: null,
-				displayImage: null,
-				type: null,
-				active: null,
+				creating: true,
+				loading: true,
+			};
+		},
+		endCreatingUser: (state) => {
+			return {
+				...state,
+				creating: false,
 			};
 		},
 	},
@@ -44,4 +58,10 @@ const user = createSlice({
 
 export default user.reducer;
 
-export const { setUser, removeUser } = user.actions;
+export const {
+	initUser,
+	setUser,
+	removeUser,
+	startCreatingUser,
+	endCreatingUser,
+} = user.actions;

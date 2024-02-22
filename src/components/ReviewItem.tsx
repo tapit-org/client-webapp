@@ -1,63 +1,72 @@
-import { StarIcon } from '@heroicons/react/24/solid';
-import React, { FC } from 'react';
-import Avatar from 'shared/Avatar/Avatar';
-
-interface ReviewItemDataType {
-	name: string;
-	avatar?: string;
-	date: string;
-	comment: string;
-	starPoint: number;
-}
+import { StarIcon } from "@heroicons/react/24/solid";
+import { Star, StarHalf, StarOutline, ThumbDown } from "@mui/icons-material";
+import { Rating } from "@mui/material";
+import { ProductReviewInterface } from "interfaces/product.interface";
+import React, { FC, memo } from "react";
+import Avatar from "shared/Avatar/Avatar";
 
 export interface ReviewItemProps {
-	className?: string;
-	data?: ReviewItemDataType;
+	review?: ProductReviewInterface;
 }
 
-const DEMO_DATA: ReviewItemDataType = {
-	name: 'Cody Fisher',
-	date: 'May 20, 2021',
-	comment:
-		'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-	starPoint: 5,
-};
+function formatTimeDifference(timestamp: number) {
+	const currentTime = Date.now();
+	const timestampDate = new Date(timestamp * 1000); // Convert seconds to milliseconds
 
-const ReviewItem: FC<ReviewItemProps> = ({ className = '', data = DEMO_DATA }) => {
+	const timeDifference = currentTime - timestampDate.getTime();
+	const secondsDifference = Math.floor(timeDifference / 1000);
+	console.log(secondsDifference);
+	if (secondsDifference >= 86400) {
+		const days = Math.floor(secondsDifference / 86400);
+		return `${days} day${days === 1 ? "" : "s"} ago`;
+	} else if (secondsDifference >= 3600) {
+		const hours = Math.floor(secondsDifference / 3600);
+		return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+	} else if (secondsDifference >= 60) {
+		const minutes = Math.floor(secondsDifference / 60);
+		return `${minutes} minute${minutes === 1 ? "" : "s"} ago`;
+	} else {
+		return "just now";
+	}
+}
+
+const ReviewItem: FC<ReviewItemProps> = ({ review }) => {
 	return (
-		<div className={`nc-ReviewItem flex flex-col ${className}`} data-nc-id="ReviewItem">
-			<div className=" flex space-x-4 ">
+		<div className={`nc-ReviewItem flex flex-col`} data-nc-id="ReviewItem">
+			<div className="flex space-x-4">
 				<div className="flex-shrink-0 pt-0.5">
 					<Avatar
 						sizeClass="h-10 w-10 text-lg"
 						radius="rounded-full"
-						userName={data.name}
-						imgUrl={data.avatar}
+						userName={review.userName}
+						imgUrl={""}
 					/>
 				</div>
 
 				<div className="flex-1 flex justify-between">
 					<div className="text-sm sm:text-base">
-						<span className="block font-semibold">{data.name}</span>
-						<span className="block mt-0.5 text-slate-500 dark:text-slate-400 text-sm">
-							{data.date}
+						<span className="block font-semibold">
+							{review.userName}
+						</span>
+						<span className="block mt-0.5 text-slate-500 dark:text-slate-400 text-xs">
+							{formatTimeDifference(review.createdAt)}
 						</span>
 					</div>
 
-					<div className="mt-0.5 flex text-yellow-500">
-						<StarIcon className="w-5 h-5" />
-						<StarIcon className="w-5 h-5" />
-						<StarIcon className="w-5 h-5" />
-						<StarIcon className="w-5 h-5" />
-						<StarIcon className="w-5 h-5" />
-					</div>
+					<Rating
+						defaultValue={review.rating}
+						precision={0.1}
+						readOnly
+					/>
 				</div>
 			</div>
 			<div className="mt-4 prose prose-sm sm:prose dark:prose-invert sm:max-w-2xl">
-				<p className="text-slate-600 dark:text-slate-300">{data.comment}</p>
+				<p className="text-slate-600 dark:text-slate-300">
+					{review.review}
+				</p>
 			</div>
 		</div>
 	);
 };
 
-export default ReviewItem;
+export default memo(ReviewItem);

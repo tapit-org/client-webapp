@@ -1,22 +1,30 @@
-import React, { FC, ImgHTMLAttributes, useEffect, useRef, useState } from 'react';
-import checkInViewIntersectionObserver from 'utils/isInViewPortIntersectionObserver';
-import PlaceIcon from 'shared/NcImage/PlaceIcon';
+import React, {
+	FC,
+	ImgHTMLAttributes,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
+import checkInViewIntersectionObserver from "utils/isInViewPortIntersectionObserver";
+import PlaceIcon from "shared/NcImage/PlaceIcon";
 
 export interface NcImageProps extends ImgHTMLAttributes<HTMLImageElement> {
 	containerClassName?: string;
 }
 
 const NcImage: FC<NcImageProps> = ({
-	containerClassName = '',
-	alt = 'nc-imgs',
-	src = '',
-	className = 'object-cover w-full h-full',
+	containerClassName = "",
+	alt = "nc-imgs",
+	src = "",
+	className = "object-cover w-full h-full",
+	height = null,
+	width = null,
 	...args
 }) => {
 	const _containerRef = useRef(null);
 	let _imageEl: HTMLImageElement | null = null;
 
-	const [__src, set__src] = useState('');
+	const [__src, set__src] = useState("");
 	const [imageLoaded, setImageLoaded] = useState(false);
 
 	const _checkInViewPort = () => {
@@ -25,7 +33,7 @@ const NcImage: FC<NcImageProps> = ({
 			target: _containerRef.current as any,
 			options: {
 				root: null,
-				rootMargin: '0%',
+				rootMargin: "0%",
 				threshold: 0,
 			},
 			freezeOnceVisible: true,
@@ -41,7 +49,7 @@ const NcImage: FC<NcImageProps> = ({
 		_imageEl = new Image();
 		if (_imageEl) {
 			_imageEl.src = src;
-			_imageEl.addEventListener('load', _handleImageLoaded);
+			_imageEl.addEventListener("load", _handleImageLoaded);
 		}
 		return true;
 	};
@@ -72,10 +80,31 @@ const NcImage: FC<NcImageProps> = ({
 		<div
 			className={`nc-NcImage ${containerClassName}`}
 			data-nc-id="NcImage"
+			style={
+				height && width
+					? {
+							height: height,
+							width: width,
+					  }
+					: {}
+			}
 			ref={_containerRef}
 		>
 			{__src && imageLoaded ? (
-				<img src={__src} className={className} alt={alt} {...args} />
+				<img
+					style={
+						height && width
+							? {
+									height: height,
+									width: width,
+							  }
+							: {}
+					}
+					src={__src}
+					className={className}
+					alt={alt}
+					{...args}
+				/>
 			) : (
 				renderLoadingPlaceholder()
 			)}

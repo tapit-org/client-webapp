@@ -14,3 +14,11 @@
 .ql-editor { 
     height: 300px  !important;
 }
+
+.rounded-circle {
+    border-radius: 50%;
+}
+
+.font-weight-bold {
+    font-weight: bold;
+}

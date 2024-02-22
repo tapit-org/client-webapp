@@ -1,20 +1,12 @@
-import googleSvg from 'images/Google.svg';
-import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
-import LoginForm from './LoginForm';
-import FirebaseSocial from 'components/FirebaseSocial';
+import { Helmet } from "react-helmet-async";
+import { Link as RouterLink } from "react-router-dom";
+import LoginForm from "./LoginForm";
+import FirebaseSocial from "components/FirebaseSocial";
+import { Link } from "@mui/material";
 
-const loginSocials = [
-	{
-		name: 'Continue with Google',
-		href: '#',
-		icon: googleSvg,
-	},
-];
-
-const PageLogin = () => {
+const Login = () => {
 	return (
-		<div className={'nc-PageLogin'} data-nc-id="PageLogin">
+		<div>
 			<Helmet>
 				<title>Login | Tap-it</title>
 			</Helmet>
@@ -25,33 +17,22 @@ const PageLogin = () => {
 				<div className="max-w-md mx-auto space-y-6">
 					<div className="grid gap-3">
 						<FirebaseSocial />
-						{/* {loginSocials.map((item, index) => (
-							<a
-								key={index}
-								href={item.href}
-								className="flex w-full rounded-lg bg-primary-50 dark:bg-neutral-800 px-4 py-3 transform transition-transform sm:px-6 hover:translate-y-[-2px]"
-							>
-								<img className="flex-shrink-0" src={item.icon} alt={item.name} />
-								<h3 className="flex-grow text-center text-sm font-medium text-neutral-700 dark:text-neutral-300 sm:text-sm">
-									{item.name}
-								</h3>
-							</a>
-						))} */}
 					</div>
-					{/* OR */}
 					<div className="relative text-center">
 						<span className="relative z-10 inline-block px-4 font-medium text-sm bg-white dark:text-neutral-400 dark:bg-neutral-900">
 							OR
 						</span>
 						<div className="absolute left-0 w-full top-1/2 transform -translate-y-1/2 border border-neutral-100 dark:border-neutral-800"></div>
 					</div>
-					{/* FORM */}
 					<LoginForm />
-
-					{/* ==== */}
 					<span className="block text-center text-neutral-700 dark:text-neutral-300">
 						New user? {` `}
-						<Link className="text-green-600" to="/signup">
+						<Link
+							component={RouterLink}
+							color="text.primary"
+							className="text-neutral-800 dark:text-neutral-200"
+							to="/signup"
+						>
 							Create an account
 						</Link>
 					</span>
@@ -61,4 +42,4 @@ const PageLogin = () => {
 	);
 };
 
-export default PageLogin;
+export default Login;

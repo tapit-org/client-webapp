@@ -4,6 +4,7 @@ import { PRODUCTS } from 'data/data';
 import ButtonCircle from 'shared/Button/ButtonCircle';
 import Input from 'shared/Input/Input';
 import TabFilters from 'components/TabFilters';
+import ProductList from 'components/ProductList';
 
 const ProductCollection = () => {
 	return (
@@ -83,15 +84,10 @@ const ProductCollection = () => {
 			<div className="container py-16 lg:pb-28 lg:pt-20 space-y-16 sm:space-y-20 lg:space-y-28">
 				<div className="space-y-10 lg:space-y-14">
 					<main>
-						{/* TABS FILTER */}
 						<TabFilters />
-
-						{/* LOOP ITEMS */}
-						<div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-10 mt-8 lg:mt-10">
-							{PRODUCTS.map((item, index) => (
-								<ProductCard data={item} key={index} />
-							))}
-						</div>
+                        <div className='my-5'> 
+						    <ProductList/>
+                        </div>
 					</main>
 				</div>
 			</div>

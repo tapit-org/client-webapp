@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 // material-ui
 import {
@@ -10,55 +10,80 @@ import {
 	Grid,
 	Link,
 	Stack,
-} from '@mui/material';
+} from "@mui/material";
 
 // third party
-import * as Yup from 'yup';
-import { Formik } from 'formik';
-import { toast } from 'react-toastify';
-import { EmailOutlined, LockOutlined } from '@mui/icons-material';
+import * as Yup from "yup";
+import { Formik } from "formik";
+import { toast } from "react-toastify";
+import { EmailOutlined, LockOutlined } from "@mui/icons-material";
 // assets
 // import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
-import { auth } from 'firebaseConfig';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import Label from 'components/Label/Label';
-import Input from 'shared/Input/Input';
-import ButtonPrimary from 'shared/Button/ButtonPrimary';
+import { auth } from "firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import Label from "components/Label/Label";
+import Input from "shared/Input/Input";
+import ButtonPrimary from "shared/Button/ButtonPrimary";
+import { dispatch } from "store";
+import { handleShowErrorToast } from "services/notification.service";
+import useBoolState from "hooks/useBoolState";
+import { createUser, getUser } from "services/auth.service";
+import { setUser } from "store/reducers/user";
+import OverlayLoader from "components/OverlayLoader";
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const LoginForm = () => {
+	const navigate = useNavigate();
+	const [showLoader, toggleShowLoader] = useBoolState(false);
 	const [checked, setChecked] = React.useState(false);
 	const handleLogin = async (email: string, password: string) => {
 		try {
-			await signInWithEmailAndPassword(auth, email, password);
-		} catch (err) {
-			if (err.code === 'auth/user-not-found') {
-				toast.error('User not found');
-			} else if (err.code === 'auth/wrong-password') {
-				toast.error('Wrong password');
+			toggleShowLoader();
+			const firebaseRespose = await signInWithEmailAndPassword(
+				auth,
+				email,
+				password,
+			);
+			const accessToken = await firebaseRespose.user.getIdToken();
+			localStorage.setItem("access_token", accessToken);
+			const user = await getUser();
+			dispatch(setUser(user));
+			toggleShowLoader();
+			navigate("/");
+		} catch (error) {
+			console.log(error.code);
+			if (error.code === "auth/invalid-login-credentials") {
+				handleShowErrorToast("Invalid Login Credentials");
 			} else {
-				toast.error('Something went wrong');
+				handleShowErrorToast("Something went wrong - " + error.code);
 			}
+			toggleShowLoader();
 		}
 	};
 	return (
 		<>
+			{showLoader && <OverlayLoader />}
 			<Formik
 				initialValues={{
-					email: 'testtest@gmail.com',
-					password: 'testtest',
+					email: "testtest@gmail.com",
+					password: "testtest",
 					submit: null,
 				}}
 				validationSchema={Yup.object().shape({
 					email: Yup.string()
-						.email('Must be a valid email')
+						.email("Must be a valid email")
 						.max(255)
-						.required('Email is required'),
-					password: Yup.string().max(255).required('Password is required'),
+						.required("Email is required"),
+					password: Yup.string()
+						.max(255)
+						.required("Password is required"),
 				})}
-				onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+				onSubmit={async (
+					values,
+					{ setErrors, setStatus, setSubmitting },
+				) => {
 					try {
 						setStatus({ success: false });
 						await handleLogin(values.email, values.password);
@@ -150,7 +175,9 @@ const LoginForm = () => {
 											<Checkbox
 												checked={checked}
 												onChange={(event) =>
-													setChecked(event.target.checked)
+													setChecked(
+														event.target.checked,
+													)
 												}
 												name="checked"
 												color="primary"
@@ -159,7 +186,7 @@ const LoginForm = () => {
 										}
 										label={
 											<span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
-												Keep me sign in
+												Keep me signed in
 											</span>
 										}
 									/>
@@ -175,8 +202,12 @@ const LoginForm = () => {
 							</Grid>
 
 							<Grid item xs={12}>
-								<ButtonPrimary type="submit" className="w-100">
-									Login
+								<ButtonPrimary
+									type="submit"
+									className="w-100"
+									disabled={showLoader}
+								>
+									{showLoader ? "Logging in.." : "Login"}
 								</ButtonPrimary>
 							</Grid>
 						</Grid>

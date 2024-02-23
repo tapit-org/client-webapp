@@ -41,7 +41,7 @@ export interface ProfileInterface {
 	title: string | null;
 	company: string | null;
 	location?: string | null;
-	socials: SocialButtonInterface[];
+	socials?: SocialButtonInterface[];
 	contactButtons: ContactButtonInterface[];
 	about: string | null;
 	theme: PROFILE_THEMES;

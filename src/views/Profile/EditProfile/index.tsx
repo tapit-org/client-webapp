@@ -299,6 +299,7 @@ const EditProfile = () => {
 						profileImage={profileImage}
 						coverImage={coverImage}
 						contactButtons={contactButtons}
+						socials={[]}
 					/>
 				</Modal>
 			</Grid>

@@ -25,13 +25,18 @@ const DefaultProfileTemplate = ({
 	profileImage,
 	coverImage,
 	contactButtons,
+	socials,
 }) => {
 	const renderContactButtons = (contactButtons: ContactButtonInterface[]) => {
 		return contactButtons
 			.filter((contactButton: any) => contactButton.enabled)
 			.map((contactButton: any) => (
 				<Tooltip title={contactButton.text} key={contactButton.id}>
-					<Link to={contactButton.link} className="my-2">
+					<Link
+						to={contactButton.link}
+						target="_blank"
+						className="my-2"
+					>
 						{ACTION_ICONS[contactButton.id]}
 					</Link>
 				</Tooltip>
@@ -58,9 +63,10 @@ const DefaultProfileTemplate = ({
 	};
 	return (
 		<Box
-			className="m-auto relative "
+			className="m-auto relative"
 			sx={{
 				maxWidth: 480,
+				height: `calc(100vh - ${80}px)`,
 			}}
 		>
 			<Grid container className="p-3">
@@ -124,7 +130,7 @@ const DefaultProfileTemplate = ({
 								{contactButtons &&
 									renderContactButtons(contactButtons)}
 
-								<Tooltip title="Save">
+								{/* <Tooltip title="Save">
 									<Link to={""} className="my-2">
 										<DownloadOutlined fontSize="small" />
 									</Link>
@@ -134,7 +140,7 @@ const DefaultProfileTemplate = ({
 									<Link to={""} className="my-2">
 										<ShareOutlined fontSize="small" />
 									</Link>
-								</Tooltip>
+								</Tooltip> */}
 							</Stack>
 							{about && (
 								<div className="m-3">
@@ -150,11 +156,16 @@ const DefaultProfileTemplate = ({
 					</div>
 				</div>
 			</Grid>
-			{/* {socials.length > 0 && <Box className='absolute bottom-0 w-100 text-center m-auto' sx={{
-                maxWidth: 480
-            }}>
-                {renderSocials(socials)}
-            </Box>} */}
+			{socials.length > 0 && (
+				<Box
+					className="absolute bottom-0 w-100 text-center m-auto"
+					sx={{
+						maxWidth: 480,
+					}}
+				>
+					{renderSocials(socials)}
+				</Box>
+			)}
 		</Box>
 	);
 };

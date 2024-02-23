@@ -1,4 +1,4 @@
-import axios, { API_URL } from "axios.config";
+import axios, { API_URL, EXPRESS_API_URL } from "axios.config";
 import {
 	PROFILE_THEMES,
 	ProfileListItemInterface,
@@ -16,7 +16,8 @@ export const getProfileCardList = async (uid: string) => {
 };
 
 export const getProfile = async (profileId: string) => {
-	const response = await axios.get(`${API_URL}/profiles/${profileId}`);
+	console.log(`${EXPRESS_API_URL}/profile/${profileId}`);
+	const response = await axios.get(`${EXPRESS_API_URL}/profile/${profileId}`);
 	console.log("Getting Profiles", response);
 	const profile: ProfileInterface = response.data;
 	console.log(profile);

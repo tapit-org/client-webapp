@@ -6,7 +6,8 @@ import DefaultProfileTemplate from "views/Profile/templates/Default";
 
 const ViewProfile = () => {
 	console.log("Loading");
-	const { profileId } = useParams();
+	const params = useParams();
+	const profileId = params.profileId || "tapit";
 	const [profileData, setProfileData] = useState(null as ProfileInterface);
 	useEffect(() => {
 		(async () => {
@@ -23,6 +24,7 @@ const ViewProfile = () => {
 				profileImage={profileData.profileImage}
 				coverImage={profileData.coverImage}
 				contactButtons={profileData.contactButtons}
+				socials={profileData.socials}
 			/>
 		);
 };

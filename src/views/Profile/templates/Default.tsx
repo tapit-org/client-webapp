@@ -44,21 +44,19 @@ const DefaultProfileTemplate = ({
 	};
 	const renderSocials = (socials: SocialButtonInterface[]) => {
 		return (
-			<div>
-				<Stack
-					className="p-2 bg-white dark:bg-neutral-800 rounded-full shadow-lg overflow-x-auto hiddenScrollbar m-4 justify-items-center"
-					direction="row"
-					justifyContent="center"
-					alignItems="center"
-					spacing={2}
-				>
-					{socials.map((item, index) => (
-						<Link className="w-10 h-10" key={index} to={item.link}>
-							<SocialIcon type={item.name} />
-						</Link>
-					))}
-				</Stack>
-			</div>
+			<Stack
+				className="p-2 bg-white dark:bg-neutral-800 rounded-full shadow-lg overflow-x-auto hiddenScrollbar m-4 justify-items-center w-100"
+				direction="row"
+				justifyContent="center"
+				alignItems="center"
+				spacing={2}
+			>
+				{socials.map((item, index) => (
+					<Link className="w-10 h-10" key={index} to={item.link}>
+						<SocialIcon type={item.name} />
+					</Link>
+				))}
+			</Stack>
 		);
 	};
 	return (
@@ -83,7 +81,7 @@ const DefaultProfileTemplate = ({
 							className="flex flex-col p-3 rounded-2xl shadow-lg bg-white  dark:bg-black mx-5 relative"
 							style={{
 								marginTop: -60,
-								marginBottom: 100,
+								marginBottom: 0,
 							}}
 						>
 							<Stack
@@ -157,14 +155,9 @@ const DefaultProfileTemplate = ({
 				</div>
 			</Grid>
 			{socials.length > 0 && (
-				<Box
-					className="absolute bottom-0 w-100 text-center m-auto"
-					sx={{
-						maxWidth: 480,
-					}}
-				>
+				<Grid container className="p-3 w-100">
 					{renderSocials(socials)}
-				</Box>
+				</Grid>
 			)}
 		</Box>
 	);

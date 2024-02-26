@@ -8,7 +8,7 @@ import {
 
 export const getProfileCardList = async (uid: string) => {
 	// Axios call to backend
-	const response = await axios.get(`${API_URL}/users/${uid}/profiles`);
+	const response = await axios.get(`${API_URL}/users/akshatakamath/profiles`);
 	console.log("Getting Profiles", response);
 	const profileList: ProfileListItemInterface[] = response.data;
 	console.log(profileList);

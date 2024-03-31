@@ -1,5 +1,5 @@
 {
-  "projects": {
-    "default": "tapit-connect-development"
-  }
+	"projects": {
+		"default": "tapit-connect-prod"
+	}
 }

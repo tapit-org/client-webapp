@@ -300,6 +300,8 @@ const EditProfile = () => {
 						coverImage={coverImage}
 						contactButtons={contactButtons}
 						socials={[]}
+						profileId={undefined}
+						vcard={undefined}
 					/>
 				</Modal>
 			</Grid>

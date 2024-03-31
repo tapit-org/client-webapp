@@ -18,6 +18,7 @@ const ACTION_ICONS = {
 	PHONE: <PhoneOutlined fontSize="small" />,
 };
 const DefaultProfileTemplate = ({
+	profileId,
 	name,
 	title,
 	company,
@@ -26,7 +27,18 @@ const DefaultProfileTemplate = ({
 	coverImage,
 	contactButtons,
 	socials,
+	vcard,
 }) => {
+	const downloadVCard = async (e: any) => {
+		e.preventDefault();
+		const element = document.createElement("a");
+		const file = new Blob([vcard], { type: "text/vcard" });
+		element.href = URL.createObjectURL(file);
+		element.download = "myFile.txt";
+		element.download = profileId + ".vcf";
+		document.body.appendChild(element); // Required for this to work in FireFox
+		element.click();
+	};
 	const renderContactButtons = (contactButtons: ContactButtonInterface[]) => {
 		return contactButtons
 			.filter((contactButton: any) => contactButton.enabled)
@@ -128,17 +140,13 @@ const DefaultProfileTemplate = ({
 								{contactButtons &&
 									renderContactButtons(contactButtons)}
 
-								{/* <Tooltip title="Save">
-									<Link to={""} className="my-2">
-										<DownloadOutlined fontSize="small" />
-									</Link>
+								<Tooltip title="Save">
+									<DownloadOutlined
+										style={{ cursor: "pointer" }}
+										onClick={downloadVCard}
+										fontSize="small"
+									/>
 								</Tooltip>
-
-								<Tooltip title="Share">
-									<Link to={""} className="my-2">
-										<ShareOutlined fontSize="small" />
-									</Link>
-								</Tooltip> */}
 							</Stack>
 							{about && (
 								<div className="m-3">

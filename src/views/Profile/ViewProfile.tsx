@@ -25,6 +25,8 @@ const ViewProfile = () => {
 				coverImage={profileData.coverImage}
 				contactButtons={profileData.contactButtons}
 				socials={profileData.socials}
+				profileId={profileId}
+				vcard={profileData.vcard}
 			/>
 		);
 };

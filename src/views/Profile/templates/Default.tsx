@@ -17,25 +17,14 @@ const ACTION_ICONS = {
 	EMAIL: <EmailOutlined fontSize="small" />,
 	PHONE: <PhoneOutlined fontSize="small" />,
 };
-const DefaultProfileTemplate = ({
-	profileId,
-	name,
-	title,
-	company,
-	about,
-	profileImage,
-	coverImage,
-	contactButtons,
-	socials,
-	vcard,
-}) => {
+const DefaultProfileTemplate = ({ data }) => {
 	const downloadVCard = async (e: any) => {
 		e.preventDefault();
 		const element = document.createElement("a");
-		const file = new Blob([vcard], { type: "text/vcard" });
+		const file = new Blob([data.vcard], { type: "text/vcard" });
 		element.href = URL.createObjectURL(file);
 		element.download = "myFile.txt";
-		element.download = profileId + ".vcf";
+		element.download = data.id + ".vcf";
 		document.body.appendChild(element); // Required for this to work in FireFox
 		element.click();
 	};
@@ -86,7 +75,7 @@ const DefaultProfileTemplate = ({
 							<NcImage
 								containerClassName="relative h-0 aspect-h-9 aspect-w-16 rounded-xl overflow-hidden"
 								className="w-full rounded-2xl object-cover"
-								src={coverImage}
+								src={data.coverImage.url}
 							/>
 						</div>
 						<div
@@ -109,8 +98,9 @@ const DefaultProfileTemplate = ({
 											maxHeight: 80,
 										}}
 										src={
-											profileImage ||
-											require("images/placeholder-profile.png")
+											data.profileImage
+												? data.profileImage.url
+												: require("images/placeholder-profile.png")
 										}
 										className="rounded-full object-cover m-auto"
 										alt="profile"
@@ -121,12 +111,14 @@ const DefaultProfileTemplate = ({
 										variant="h6"
 										className="font-semibold text-slate-900 text-xl"
 									>
-										{name}
+										{data.name}
 									</Typography>
 									<p className="text-slate-500 mt-0.5 text-xs">
-										{title}
-										{title && company && <span>, </span>}
-										{company}
+										{data.title}
+										{data.title && data.company && (
+											<span>, </span>
+										)}
+										{data.company}
 									</p>
 								</div>
 							</Stack>
@@ -137,8 +129,8 @@ const DefaultProfileTemplate = ({
 								direction={"row"}
 								spacing={2}
 							>
-								{contactButtons &&
-									renderContactButtons(contactButtons)}
+								{/* {contactButtons &&
+									renderContactButtons(contactButtons)} */}
 
 								<Tooltip title="Save">
 									<DownloadOutlined
@@ -148,12 +140,12 @@ const DefaultProfileTemplate = ({
 									/>
 								</Tooltip>
 							</Stack>
-							{about && (
+							{data.about && (
 								<div className="m-3">
 									<p
 										className="text-center text-sm"
 										dangerouslySetInnerHTML={{
-											__html: about,
+											__html: data.about,
 										}}
 									></p>
 								</div>
@@ -162,9 +154,9 @@ const DefaultProfileTemplate = ({
 					</div>
 				</div>
 			</Grid>
-			{socials.length > 0 && (
+			{data.socials.length > 0 && (
 				<Grid container className="p-3 w-100">
-					{renderSocials(socials)}
+					{renderSocials(data.socials)}
 				</Grid>
 			)}
 		</Box>

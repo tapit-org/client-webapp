@@ -61,27 +61,19 @@ const EditProfile = () => {
 
 	const { profileId } = useParams();
 	const [profileData, setProfileData] = useState<ProfileInterface>();
-	const [updatedProfileData, setUpdatedProfileData] =
+	const [profileDataBackup, setProfileDataBackup] =
 		useState<ProfileInterface>();
 	const [activeTab, setActiveTab] = useState(TAB_NAMES.PROFILE_DETAILS);
-	const [activeTabIndex, setActiveTabIndex] = useState(0);
-	const [showPreview, setShowPreview] = useState(isDesktop);
+	const [showPreview, setShowPreview] = useState(false);
 	const [showLoader, setShowLoader] = useState(true);
-	const [name, setName] = useState("");
-	const [title, setTitle] = useState("");
-	const [company, setCompany] = useState("");
-	const [about, setAbout] = useState("");
-	const [phoneNumber, setPhoneNumber] = useState("");
-	const [phoneCode, setPhoneCode] = useState("");
-	const [showPhone, setShowPhone] = useState("");
-	const [email, setEmail] = useState("");
-	const [showEmail, setShowEmail] = useState("");
-	const [website, setWebsite] = useState("");
-	const [showWebsite, setShowWebsite] = useState("");
-	const [profileImage, setProfileImage] = useState("");
-	const [coverImage, setCoverImage] = useState("");
-	const [socials, setSocials] = useState<SocialButtonInterface[]>([]);
-
+	const handleUpdateProfileData = (key, value) => {
+		setProfileData((prev) => {
+			return {
+				...prev,
+				[key]: value,
+			};
+		});
+	};
 	const TABS = [
 		{
 			name: TAB_NAMES.PROFILE_DETAILS,
@@ -89,29 +81,24 @@ const EditProfile = () => {
 			component: (
 				<>
 					<ProfileForm
-						name={name}
-						setName={setName}
-						title={title}
-						setTitle={setTitle}
-						company={company}
-						setCompany={setCompany}
+						data={profileData}
+						updateData={handleUpdateProfileData}
 					/>
-					<AboutForm about={about} setAbout={setAbout} />
 				</>
 			),
 		},
-		{
-			name: TAB_NAMES.IMAGES,
-			icon: <ImageOutlined fontSize="small" />,
-			component: (
-				<Images
-					profileImage={profileImage}
-					setProfileImage={setProfileImage}
-					coverImage={coverImage}
-					setCoverImage={setCoverImage}
-				/>
-			),
-		},
+		// {
+		// 	name: TAB_NAMES.IMAGES,
+		// 	icon: <ImageOutlined fontSize="small" />,
+		// 	component: (
+		// 		<Images
+		// 			profileImage={profileImage}
+		// 			setProfileImage={setProfileImage}
+		// 			coverImage={coverImage}
+		// 			setCoverImage={setCoverImage}
+		// 		/>
+		// 	),
+		// },
 		// {
 		// 	name: TAB_NAMES.CONTACT_BUTTONS,
 		// 	icon: <AlternateEmail fontSize="small" />,
@@ -126,52 +113,27 @@ const EditProfile = () => {
 		// 	),
 		// },
 	];
-
-	useEffect(() => {
-		(async () => {
-			setShowLoader(true);
-			const response = await getProfile(profileId);
-			setProfileData(response);
-			initProfileProperties(response);
-			setShowLoader(false);
-		})();
-	}, [profileId]);
-	const initProfileProperties = (profileData: ProfileInterface) => {
-		setName(profileData.name);
-		setTitle(profileData.title);
-		setCompany(profileData.company);
-		setAbout(profileData.about);
-		setProfileImage(profileData.profileImage);
-		setCoverImage(profileData.coverImage);
-		setAbout(profileData.about);
+	const handleInitProfileData = async (id: string) => {
+		setShowLoader(true);
+		const response = await getProfile(id);
+		setProfileData(response);
+		setProfileDataBackup(response);
+		setShowLoader(false);
 	};
+	useEffect(() => {
+		if (profileId) {
+			handleInitProfileData(profileId);
+		}
+	}, [profileId]);
 	const handleViewPreview = () => {
 		setShowPreview(true);
 	};
 	const handleResetToSaved = () => {
-		setUpdatedProfileData(profileData);
-		initProfileProperties(profileData);
+		setProfileData(profileDataBackup);
 	};
 	const handleUpdateProfile = async () => {
-		console.log(updatedProfileData);
-		console.log(name, title);
-		const newProfileData: ProfileInterface = {
-			uid: profileData.uid,
-			profileId: profileData.profileId,
-			status: PROFILE_STATUS.ACTIVE,
-			name,
-			title,
-			company,
-			socials: [],
-			contactButtons: [],
-			about,
-			theme: PROFILE_THEMES.DEFAULT,
-			profileImage: profileImage,
-			coverImage: coverImage,
-		};
-		console.log(newProfileData);
 		setShowLoader(true);
-		const response = await updateProfile(newProfileData);
+		const response = await updateProfile(profileData);
 		console.log(response);
 		setShowLoader(false);
 	};
@@ -204,7 +166,6 @@ const EditProfile = () => {
 												}
 												onClick={() => {
 													setActiveTab(item.name);
-													setActiveTabIndex(index);
 												}}
 											>
 												<Stack
@@ -275,24 +236,18 @@ const EditProfile = () => {
 						</Stack>
 					</Paper>
 				</Grid>
+				{isDesktop && (
+					<Grid item md={6} lg={4}>
+						<DefaultProfileTemplate data={profileData} />
+					</Grid>
+				)}
 				<Modal
 					show={showPreview}
 					onCloseModalQuickView={() => setShowPreview(false)}
 					position="bottom"
 					padding={2}
 				>
-					<DefaultProfileTemplate
-						name={name}
-						title={title}
-						company={company}
-						about={about}
-						profileImage={profileImage}
-						coverImage={coverImage}
-						contactButtons={[]}
-						profileId={undefined}
-						socials={undefined}
-						vcard={undefined}
-					/>
+					<DefaultProfileTemplate data={profileData} />
 				</Modal>
 			</Grid>
 		</div>

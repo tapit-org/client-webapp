@@ -37,18 +37,24 @@ export interface ContactButtonInterface {
 	text?: string;
 }
 export interface ProfileInterface {
+	id: string;
 	uid: string;
-	profileId: string;
-	status: PROFILE_STATUS;
 	name: string;
-	title: string | null;
-	company: string | null;
-	location?: string | null;
+	title: string;
+	company: string;
+	phoneNumber: string;
+	phoneCode: string;
+	email: string;
+	website: string;
+	mapLink: string;
+	visibleButtons: string[];
+	about: string;
+	vcard: string;
 	socials: SocialButtonInterface[];
-	contactButtons: ContactButtonInterface[];
-	about: string | null;
+	profileImage: ImageInterface | null;
+	coverImage: ImageInterface | null;
 	theme: PROFILE_THEMES;
-	profileImage: string | null;
-	coverImage: string | null;
-	vcard?: string | null;
+	status: PROFILE_STATUS;
+	createdAt: Date;
+	updatedAt: Date;
 }

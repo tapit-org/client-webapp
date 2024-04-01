@@ -41,7 +41,7 @@ export const createProfile = async (id: string, name: string) => {
 export const updateProfile = async (profileData: ProfileInterface) => {
 	try {
 		const response = await axios.patch(
-			`${API_URL}/profile/${profileData.profileId}`,
+			`${API_URL}/profile/${profileData.id}`,
 			profileData,
 		);
 		console.log(response);

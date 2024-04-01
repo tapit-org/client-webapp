@@ -13,21 +13,7 @@ const ViewProfile = () => {
 			setProfileData(await getProfile(profileId));
 		})();
 	}, [profileId]);
-	if (profileData)
-		return (
-			<DefaultProfileTemplate
-				name={profileData.name}
-				title={profileData.title}
-				company={profileData.company}
-				about={profileData.about}
-				profileImage={profileData.profileImage}
-				coverImage={profileData.coverImage}
-				contactButtons={profileData.contactButtons}
-				profileId={undefined}
-				socials={undefined}
-				vcard={undefined}
-			/>
-		);
+	if (profileData) return <DefaultProfileTemplate data={profileData} />;
 };
 
 export default ViewProfile;

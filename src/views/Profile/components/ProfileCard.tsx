@@ -37,7 +37,7 @@ const ProfileCard: FC<ProfileCardProps> = ({ profileListItem }) => {
 					<img
 						alt="profile"
 						src={
-							profileListItem.profileImage.url
+							profileListItem.profileImage
 								? profileListItem.profileImage.url
 								: ProfileImagePlaceholder
 						}

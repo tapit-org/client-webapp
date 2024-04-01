@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
-import { Box, Grid, Stack, Tooltip } from "@mui/material";
+import { Box, Grid, Stack, Tooltip, Typography } from "@mui/material";
 import {
 	EditOutlined,
 	PaletteOutlined,
@@ -37,8 +37,8 @@ const ProfileCard: FC<ProfileCardProps> = ({ profileListItem }) => {
 					<img
 						alt="profile"
 						src={
-							profileListItem.profileImage
-								? profileListItem.profileImage
+							profileListItem.profileImage.url
+								? profileListItem.profileImage.url
 								: ProfileImagePlaceholder
 						}
 						style={{
@@ -69,11 +69,11 @@ const ProfileCard: FC<ProfileCardProps> = ({ profileListItem }) => {
 							{profileListItem.name}
 						</h2>
 					)}
-					<Link to={"/profile/" + profileListItem.profileId}>
-						{profileListItem.profileId && (
-							<span className={`block text-sm text-slate-700`}>
-								@{profileListItem.profileId}
-							</span>
+					<Link to={"/@/" + profileListItem.id}>
+						{profileListItem.id && (
+							<Typography variant="body2">
+								tap-it.in/@/{profileListItem.id}
+							</Typography>
 						)}
 					</Link>
 					<div className="flex flex-col mt-5">
@@ -90,10 +90,7 @@ const ProfileCard: FC<ProfileCardProps> = ({ profileListItem }) => {
 						>
 							<Tooltip title="Edit Profile">
 								<Link
-									to={
-										"/profile/edit/" +
-										profileListItem.profileId
-									}
+									to={"/profile/edit/" + profileListItem.id}
 								>
 									<ButtonPrimary
 										className="shadow-lg"
@@ -105,9 +102,7 @@ const ProfileCard: FC<ProfileCardProps> = ({ profileListItem }) => {
 								</Link>
 							</Tooltip>
 							<Tooltip title="View Profile">
-								<Link
-									to={"/profile/" + profileListItem.profileId}
-								>
+								<Link to={"/profile/" + profileListItem.id}>
 									<ButtonPrimary
 										className="shadow-lg"
 										fontSize="text-xs"
@@ -119,10 +114,7 @@ const ProfileCard: FC<ProfileCardProps> = ({ profileListItem }) => {
 							</Tooltip>
 							<Tooltip title="Change Profile Template">
 								<Link
-									to={
-										"/profile/edit/" +
-										profileListItem.profileId
-									}
+									to={"/profile/edit/" + profileListItem.id}
 								>
 									<ButtonPrimary
 										className="shadow-lg"
@@ -134,9 +126,7 @@ const ProfileCard: FC<ProfileCardProps> = ({ profileListItem }) => {
 								</Link>
 							</Tooltip>
 							<Tooltip title="View Linked Orders">
-								<Link
-									to={"/orders" + profileListItem.profileId}
-								>
+								<Link to={"/orders" + profileListItem.id}>
 									<ButtonPrimary
 										className="shadow-lg"
 										fontSize="text-xs"

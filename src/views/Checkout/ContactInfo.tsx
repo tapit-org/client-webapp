@@ -22,7 +22,7 @@ const ContactInfo: FC<Props> = ({ checkoutUser, setCheckoutUser }) => {
 	const [name, setName] = useState(checkoutUser.name);
 	const [email, setEmail] = useState(checkoutUser.email);
 	const [phoneCode, setPhoneCode] = useState(checkoutUser.phoneCode || "91");
-	const [phone, setPhone] = useState(checkoutUser.phone || "7704080026");
+	const [phone, setPhone] = useState(checkoutUser.phone);
 	const valid = useMemo(() => {
 		return handleVerifyContactDetails(email, phone, phoneCode);
 	}, [checkoutUser]);

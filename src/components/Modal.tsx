@@ -20,7 +20,7 @@ const Modal: FC<ModalQuickViewProps> = ({
 	title = "",
 	position = "center",
 	hideClose = false,
-	padding = 8,
+	padding = 5,
 }) => {
 	return (
 		<Transition appear show={show} as={Fragment}>
@@ -70,7 +70,8 @@ const Modal: FC<ModalQuickViewProps> = ({
 							}
 						>
 							<div
-								className={`max-h-full p-${padding} w-full text-left align-middle transition-all transform lg:rounded-2xl bg-white 
+								style={{ padding }}
+								className={`max-h-full w-full text-left align-middle transition-all transform lg:rounded-2xl bg-white 
               dark:bg-neutral-900 dark:border dark:border-slate-700 dark:text-slate-100 shadow-xl rounded-xl`}
 							>
 								<Stack

@@ -145,15 +145,18 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
 
 					<div className="flex justify-between items-end ">
 						<Prices price={product.price} />
-						{product.rating && product.rating > 0 && (
-							<div className="flex items-center mb-0.5">
-								<StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
-								<span className="text-sm ml-1 text-slate-500 dark:text-slate-400">
-									{product.rating.toString()} (
-									{product.reviewCount.toString()} reviews)
-								</span>
-							</div>
-						)}
+
+						<div className="flex items-center mb-0.5">
+							<StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
+							<span className="text-sm ml-1 text-slate-500 dark:text-slate-400">
+								{product.totalRating == 0
+									? "No Reviews"
+									: `${(
+											product.totalRating /
+											product.reviewCount
+									  ).toString()} · ${product.reviewCount.toString()} Reviews`}
+							</span>
+						</div>
 					</div>
 				</div>
 			</div>

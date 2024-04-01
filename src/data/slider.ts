@@ -13,8 +13,8 @@ interface SliderType {
 export const SLIDER_DATA: SliderType[] = [
 	{
 		image: imageRightPng2,
-		heading: "Your digital business card",
-		subHeading: "In this season, find the best 🔥",
+		heading: "Tap-It and Connect.",
+		subHeading: "Your digital business card redefined",
 		btnText: "View Products",
 		btnLink: "/products",
 	},

@@ -29,7 +29,7 @@ import {
 import ButtonSecondary from "shared/Button/ButtonSecondary";
 import { getProfileCardList } from "services/profile.service";
 import { ProfileListItemInterface } from "interfaces/profile.interface";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { emptyCart } from "store/reducers/cart";
 const ModalStyles = {
@@ -46,8 +46,8 @@ const CheckoutPage = () => {
 	const navigate = useNavigate();
 	const user = useSelector((state: any) => state.user);
 	const cart = useSelector((state: any) => state.cart);
-	const shippingCost = 100;
-	const tax = 20;
+	const shippingCost = 0;
+	const tax = 0;
 	const [checkoutUser, setCheckoutUser] =
 		useState<CheckoutUserInterface>(null);
 	const [checkoutItems, setCheckoutItems] = useState<CheckoutItemInterface[]>(
@@ -56,12 +56,11 @@ const CheckoutPage = () => {
 	const [profileList, setProfileList] = useState<ProfileListItemInterface[]>(
 		[],
 	);
-	const handleSetProfileName = (changeIndex: number, profileId: string) => {
-		console.log(profileId);
+	const handleSetProfileId = (changeIndex: number, id: string) => {
 		setCheckoutItems((prev: CheckoutItemInterface[]) => {
 			return prev.map((item: CheckoutItemInterface, index: number) => {
 				if (index == changeIndex) {
-					return { ...item, profileId };
+					return { ...item, profileId: id };
 				}
 				return item;
 			});
@@ -70,8 +69,12 @@ const CheckoutPage = () => {
 	useEffect(() => {
 		if (user.uid) {
 			setCheckoutUser({
-				...user,
-				shippingAddress: null,
+				uid: user.uid,
+				email: user.email,
+				name: user.name,
+				phone: user.phone,
+				phoneCode: user.phone,
+				address: null,
 			});
 			(async () => {
 				setProfileList(await getProfileCardList(user.uid));
@@ -108,7 +111,7 @@ const CheckoutPage = () => {
 			handleShowErrorToast("Please enter all contact details.");
 			return;
 		}
-		if (!handleVerifyAddress(checkoutUser.shippingAddress)) {
+		if (!handleVerifyAddress(checkoutUser.address)) {
 			handleShowErrorToast("Please verify shipping address details.");
 			return;
 		}
@@ -146,148 +149,160 @@ const CheckoutPage = () => {
 						Checkout
 					</h2>
 				</div>
-
-				<div className="flex flex-col lg:flex-row">
-					<div className="flex-1">
-						{checkoutUser && (
-							<div className="space-y-8">
-								<ContactInfo
-									checkoutUser={checkoutUser}
-									setCheckoutUser={setCheckoutUser}
-								/>
-
-								<ShippingAddress
-									checkoutUser={checkoutUser}
-									setCheckoutUser={setCheckoutUser}
-								/>
-							</div>
-						)}
-					</div>
-
-					<div className="flex-shrink-0 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-700 my-10 lg:my-0 lg:mx-10 xl:lg:mx-14 2xl:mx-16 "></div>
-
-					<div className="w-full lg:w-[36%] ">
-						<Stack
-							direction={"row"}
-							justifyContent={"space-between"}
-							alignItems={"center"}
-						>
-							<h3 className="text-lg font-semibold">
-								Link your profiles
-							</h3>
-							<ButtonSecondary
-								sizeClass="py-2 px-4"
-								fontSize="text-sm font-medium"
-								className="bg-slate-50 dark:bg-slate-800 !rounded-lg"
-								onClick={() => {}}
-							>
-								Create New Profile
-							</ButtonSecondary>
-						</Stack>
-						<div className="my-8 ">
-							{checkoutItems.map(
-								(
-									checkoutItem: CheckoutItemInterface,
-									index: number,
-								) => {
-									return (
-										<CheckoutProduct
-											key={index}
-											checkoutItem={checkoutItem}
-											checkoutItemIndex={index}
-											handleSetProfileName={
-												handleSetProfileName
-											}
-											profileList={profileList}
-											setProfileList={setProfileList}
-										/>
-									);
-								},
-							)}
-							<Typography variant="subtitle2">
-								Our team will reach out to you for other
-								customizable detials of the cards.
-							</Typography>
-						</div>
-						<div className="py-6 border-t">
-							<div className="mb-4">
-								<Label className="text-sm">Discount code</Label>
-								<div className="flex mt-1.5">
-									<Input
-										sizeClass="h-10 px-4 py-3"
-										className="flex-1"
+				{cart.length > 0 ? (
+					<div className="flex flex-col lg:flex-row">
+						<div className="flex-1">
+							{checkoutUser && (
+								<div className="space-y-8">
+									<ContactInfo
+										checkoutUser={checkoutUser}
+										setCheckoutUser={setCheckoutUser}
 									/>
-									<button className="text-neutral-700 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 rounded-2xl px-4 ml-3 font-medium text-sm bg-neutral-200/70 dark:bg-neutral-700 dark:hover:bg-neutral-800 w-24 flex justify-center items-center transition-colors">
-										Apply
-									</button>
+
+									<ShippingAddress
+										checkoutUser={checkoutUser}
+										setCheckoutUser={setCheckoutUser}
+									/>
+								</div>
+							)}
+						</div>
+
+						<div className="flex-shrink-0 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-700 my-10 lg:my-0 lg:mx-10 xl:lg:mx-14 2xl:mx-16 "></div>
+
+						<div className="w-full lg:w-[36%] ">
+							<Stack
+								direction={"row"}
+								justifyContent={"space-between"}
+								alignItems={"center"}
+							>
+								<h3 className="text-lg font-semibold">
+									Link your profiles
+								</h3>
+								<ButtonSecondary
+									sizeClass="py-2 px-4"
+									fontSize="text-sm font-medium"
+									className="bg-slate-50 dark:bg-slate-800 !rounded-lg"
+									onClick={() => {}}
+								>
+									Create New Profile
+								</ButtonSecondary>
+							</Stack>
+							<div className="my-8 ">
+								{checkoutItems.map(
+									(
+										checkoutItem: CheckoutItemInterface,
+										index: number,
+									) => {
+										return (
+											<CheckoutProduct
+												key={index}
+												checkoutItem={checkoutItem}
+												checkoutItemIndex={index}
+												handleSetProfileId={
+													handleSetProfileId
+												}
+												profileList={profileList}
+												setProfileList={setProfileList}
+											/>
+										);
+									},
+								)}
+								<Typography variant="subtitle2">
+									Our team will reach out to you for other
+									customizable detials of the cards.
+								</Typography>
+							</div>
+							<div className="py-6 border-t">
+								<div className="mb-4">
+									<Label className="text-sm">
+										Discount code
+									</Label>
+									<div className="flex mt-1.5">
+										<Input
+											sizeClass="h-10 px-4 py-3"
+											className="flex-1"
+										/>
+										<button className="text-neutral-700 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 rounded-2xl px-4 ml-3 font-medium text-sm bg-neutral-200/70 dark:bg-neutral-700 dark:hover:bg-neutral-800 w-24 flex justify-center items-center transition-colors">
+											Apply
+										</button>
+									</div>
+								</div>
+								<CostTable
+									cart={cart}
+									shippingCost={shippingCost}
+									tax={tax}
+								/>
+								<ButtonPrimary
+									onClick={handleShowOrderConfimration}
+									className="mt-8 w-full"
+								>
+									Place Order
+								</ButtonPrimary>
+								<div className="mt-5 text-sm text-slate-500 dark:text-slate-400 flex items-center justify-center">
+									<p className="block relative pl-5">
+										<svg
+											className="w-4 h-4 absolute -left-1 top-0.5"
+											viewBox="0 0 24 24"
+											fill="none"
+										>
+											<path
+												d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
+												stroke="currentColor"
+												strokeWidth="1.5"
+												strokeLinecap="round"
+												strokeLinejoin="round"
+											/>
+											<path
+												d="M12 8V13"
+												stroke="currentColor"
+												strokeWidth="1.5"
+												strokeLinecap="round"
+												strokeLinejoin="round"
+											/>
+											<path
+												d="M11.9945 16H12.0035"
+												stroke="currentColor"
+												strokeWidth="2"
+												strokeLinecap="round"
+												strokeLinejoin="round"
+											/>
+										</svg>
+										Learn more{` `}
+										<a
+											target="_blank"
+											rel="noopener noreferrer"
+											href="##"
+											className="text-slate-900 dark:text-slate-200 underline font-medium"
+										>
+											Taxes
+										</a>
+										<span>
+											{` `}and{` `}
+										</span>
+										<a
+											target="_blank"
+											rel="noopener noreferrer"
+											href="##"
+											className="text-slate-900 dark:text-slate-200 underline font-medium"
+										>
+											Shipping
+										</a>
+										{` `} infomation
+									</p>
 								</div>
 							</div>
-							<CostTable
-								cart={cart}
-								shippingCost={shippingCost}
-								tax={tax}
-							/>
-							<ButtonPrimary
-								onClick={handleShowOrderConfimration}
-								className="mt-8 w-full"
-							>
-								Place Order
-							</ButtonPrimary>
-							<div className="mt-5 text-sm text-slate-500 dark:text-slate-400 flex items-center justify-center">
-								<p className="block relative pl-5">
-									<svg
-										className="w-4 h-4 absolute -left-1 top-0.5"
-										viewBox="0 0 24 24"
-										fill="none"
-									>
-										<path
-											d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
-											stroke="currentColor"
-											strokeWidth="1.5"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-										/>
-										<path
-											d="M12 8V13"
-											stroke="currentColor"
-											strokeWidth="1.5"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-										/>
-										<path
-											d="M11.9945 16H12.0035"
-											stroke="currentColor"
-											strokeWidth="2"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-										/>
-									</svg>
-									Learn more{` `}
-									<a
-										target="_blank"
-										rel="noopener noreferrer"
-										href="##"
-										className="text-slate-900 dark:text-slate-200 underline font-medium"
-									>
-										Taxes
-									</a>
-									<span>
-										{` `}and{` `}
-									</span>
-									<a
-										target="_blank"
-										rel="noopener noreferrer"
-										href="##"
-										className="text-slate-900 dark:text-slate-200 underline font-medium"
-									>
-										Shipping
-									</a>
-									{` `} infomation
-								</p>
-							</div>
 						</div>
 					</div>
-				</div>
+				) : (
+					<>
+						<Typography variant="h5" sx={{ pb: 2 }}>
+							Cart is empty.
+						</Typography>
+						<Link to="/products">
+							<ButtonPrimary>Add Products</ButtonPrimary>
+						</Link>
+					</>
+				)}
 				<Modal
 					open={confirmationModalOpen}
 					onClose={handleCloseConfirmationModal}

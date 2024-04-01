@@ -19,7 +19,7 @@ import toast from "react-hot-toast";
 
 export interface ReviewPageProps {
 	productId: string;
-	rating: number;
+	totalRating: number;
 	reviewCount: number;
 	setProduct: any;
 	scrollId?: string;
@@ -27,7 +27,7 @@ export interface ReviewPageProps {
 
 const Reviews: FC<ReviewPageProps> = ({
 	productId,
-	rating,
+	totalRating,
 	reviewCount,
 	setProduct,
 	scrollId = "review",
@@ -47,10 +47,10 @@ const Reviews: FC<ReviewPageProps> = ({
 		}
 		toggleCreateReviewModal();
 	};
-	const handleCreateReview = async (reviewText: string, rating: number) => {
+	const handleCreateReview = async (text: string, rating: number) => {
 		const response = await createProductReview(productId, {
-			review: reviewText,
-			rating: rating,
+			text,
+			rating,
 		});
 		if (response) {
 			setReviews((prev: ProductReviewInterface[]) => [
@@ -59,7 +59,7 @@ const Reviews: FC<ReviewPageProps> = ({
 			]);
 			setProduct((prev: ProductInterface) => ({
 				...prev,
-				rating: response.rating,
+				totalRating: response.totalRating,
 				reviewCount: response.reviewCount,
 			}));
 			toggleCreateReviewModal();
@@ -75,9 +75,11 @@ const Reviews: FC<ReviewPageProps> = ({
 			<h2 className="text-2xl font-semibold flex items-center">
 				<StarRounded fontSize="large" />
 				<span className="ml-1.5">
-					{" "}
-					{rating != 0 ? rating.toString() : ""} ·{" "}
-					{reviewCount.toString()} Reviews
+					{totalRating == 0
+						? "No Reviews"
+						: `${(
+								totalRating / reviewCount
+						  ).toString()} · ${reviewCount.toString()} Reviews`}
 				</span>
 			</h2>
 			<div className="mt-10">

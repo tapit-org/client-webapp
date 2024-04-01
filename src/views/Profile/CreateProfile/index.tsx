@@ -14,22 +14,20 @@ import { createProfile } from "services/profile.service";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import Input from "shared/Input/Input";
 import ThemeSelector from "./ThemeSelector";
+import { useSelector } from "react-redux";
 
 interface CreateProfileProps {
 	callback?: (createdProfile: ProfileListItemInterface) => void;
 }
 const CreateProfile: FC<CreateProfileProps> = ({ callback }) => {
+	const user = useSelector((state: any) => state.user);
 	const [newProfileId, setNewProfileId] = useState("");
-	const [newProfileName, setNewProfileName] = useState("");
-	const [selectedTheme, setSelectedTheme] = useState(PROFILE_THEMES.DEFAULT);
+	// const [newProfileName, setNewProfileName] = useState("");
+	// const [selectedTheme, setSelectedTheme] = useState(PROFILE_THEMES.DEFAULT);
 	const [errorText, setErrorText] = useState("");
 	const handleCreateProfile = async () => {
-		const response = await createProfile(
-			newProfileId,
-			newProfileName,
-			selectedTheme,
-		);
-		if (response.status == 400) {
+		const response = await createProfile(newProfileId, user.name);
+		if (response.status == 409) {
 			setErrorText(
 				"Profile URL is already taken! Please choose another one.",
 			);
@@ -52,13 +50,16 @@ const CreateProfile: FC<CreateProfileProps> = ({ callback }) => {
 						id="profile-id"
 						type="text"
 						name="profile-id"
-						value={newProfileId}
+						value={`tap-it.in/@/${newProfileId}`}
 						onChange={(e) =>
 							setNewProfileId(
-								e.target.value.toLowerCase().replace(" ", ""),
+								e.target.value
+									.toLowerCase()
+									.replace(" ", "")
+									.replace("tap-it.in/@/", ""),
 							)
 						}
-						placeholder="Enter Profile Name"
+						placeholder="Enter Profile Link"
 					/>
 					{errorText ? (
 						<Typography
@@ -69,11 +70,11 @@ const CreateProfile: FC<CreateProfileProps> = ({ callback }) => {
 						</Typography>
 					) : (
 						<Typography variant="subtitle2" className="px-2">
-							This url will be linked to your product.
+							This link will be linked to your product.
 						</Typography>
 					)}
 				</Stack>
-				<Input
+				{/* <Input
 					id="profile-name"
 					type="text"
 					name="profile-id"
@@ -86,7 +87,7 @@ const CreateProfile: FC<CreateProfileProps> = ({ callback }) => {
 						setSelectedTheme(theme)
 					}
 					selectedTheme={PROFILE_THEMES.DEFAULT}
-				/>
+				/> */}
 			</Stack>
 
 			<ButtonPrimary onClick={handleCreateProfile}>

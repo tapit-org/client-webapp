@@ -1,34 +1,15 @@
 import {
-	AddCircleOutlineOutlined,
-	AlternateEmailOutlined,
-	Label,
-} from "@mui/icons-material";
-import {
 	FormControl,
-	Stack,
 	InputLabel,
 	MenuItem,
 	Select,
-	Typography,
-	IconButton,
-	Tooltip,
 	Box,
-	Grid,
 	Modal,
 } from "@mui/material";
-import Heading from "components/Heading/Heading";
 import Prices from "components/Prices";
 import { CheckoutItemInterface } from "interfaces/checkout.interface";
-import {
-	PROFILE_THEMES,
-	ProfileListItemInterface,
-} from "interfaces/profile.interface";
+import { ProfileListItemInterface } from "interfaces/profile.interface";
 import { FC, useState } from "react";
-import { Link } from "react-router-dom";
-import { createProfile } from "services/profile.service";
-import ButtonPrimary from "shared/Button/ButtonPrimary";
-import ButtonSecondary from "shared/Button/ButtonSecondary";
-import Input from "shared/Input/Input";
 import CreateProfile from "views/Profile/CreateProfile";
 
 interface CheckoutProductProps {
@@ -36,7 +17,7 @@ interface CheckoutProductProps {
 	checkoutItemIndex: number;
 	profileList: ProfileListItemInterface[];
 	setProfileList: any;
-	handleSetProfileName: (checkoutItemIndex: number, value: string) => void;
+	handleSetProfileId: (checkoutItemIndex: number, id: string) => void;
 }
 const ModalStyles = {
 	position: "absolute",
@@ -54,7 +35,7 @@ const CheckoutProduct: FC<CheckoutProductProps> = ({
 	checkoutItemIndex,
 	profileList,
 	setProfileList,
-	handleSetProfileName,
+	handleSetProfileId,
 }) => {
 	const [showCreateProfileModal, setShowCreateProfileModal] = useState(false);
 	const handleCloseCreateProfileModal = () =>
@@ -96,7 +77,7 @@ const CheckoutProduct: FC<CheckoutProductProps> = ({
 											value={checkoutItem.profileId}
 											label="Age"
 											onChange={(e) =>
-												handleSetProfileName(
+												handleSetProfileId(
 													checkoutItemIndex,
 													e.target.value,
 												)
@@ -104,11 +85,11 @@ const CheckoutProduct: FC<CheckoutProductProps> = ({
 										>
 											{profileList.map((profile) => (
 												<MenuItem
-													key={profile.profileId}
-													value={profile.profileId}
+													key={profile.id}
+													value={profile.id}
 													sx={{ fontSize: "0.9em" }}
 												>
-													{profile.profileId}
+													{profile.id}
 												</MenuItem>
 											))}
 											<MenuItem
@@ -152,11 +133,10 @@ const CheckoutProduct: FC<CheckoutProductProps> = ({
 								],
 							);
 							handleCloseCreateProfileModal();
-							handleSetProfileName(
+							handleSetProfileId(
 								checkoutItemIndex,
-								createdProfile.profileId,
+								createdProfile.id,
 							);
-							console.log(createProfile);
 						}}
 					/>
 				</Box>

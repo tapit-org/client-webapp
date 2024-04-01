@@ -41,40 +41,35 @@ export const handleVerifyCheckoutItems = (checkoutItems) => {
 export const createOrder = async (
 	checkoutUser: CheckoutUserInterface,
 	checkoutItems: CheckoutItemInterface[],
-	shipping: number,
+	shippingCost: number,
 	tax: number,
 ) => {
 	try {
-		const order = {
-			amount:
-				checkoutItems
-					.map((item) => item.price)
-					.reduce((partialSum, a) => partialSum + a, 0) +
-				shipping +
-				tax,
-			coupon: "",
-			email: checkoutUser.email,
-			invoiceId: "",
+		const checkoutData = {
+			userData: {
+				uid: checkoutUser.uid,
+				name: checkoutUser.name,
+				email: checkoutUser.email,
+				phone: checkoutUser.phoneCode + checkoutUser.phone,
+				address: checkoutUser.address,
+			},
 			items: checkoutItems.map((item: CheckoutItemInterface) => {
 				return {
 					id: item.id,
 					name: item.name,
 					category: item.category,
 					price: item.price,
-					profileId: "veer",
-					// profileId: item.profileId
+					profileId: item.profileId,
 				};
 			}),
-			name: checkoutUser.name,
-			paymentId: "",
-			phone: checkoutUser.phone,
-			phoneCode: checkoutUser.phoneCode,
-			status: "PENDING",
-			uid: checkoutUser.uid,
-			address: checkoutUser.shippingAddress,
+			coupon: null,
+			amount: checkoutItems
+				.map((item) => item.price)
+				.reduce((partialSum, a) => partialSum + a, 0),
+			tax,
+			shippingCost,
 		};
-		console.log(order);
-		const response = await axios.post(`${API_URL}/orders`, order);
+		const response = await axios.post(`${API_URL}/order`, checkoutData);
 		console.log(response);
 		return response;
 	} catch (error: any) {

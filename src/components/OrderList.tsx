@@ -41,7 +41,7 @@ const OrderList: FC<OrderListProps> = ({
 				<CircularProgress />
 			</Stack>
 		);
-	if (orderList.length == 0) return <Grid>No Saved Addresses</Grid>;
+	if (orderList.length == 0) return <Grid>No Orders</Grid>;
 	const getOrderItems = (order) => {
 		return order.items.map((item: any) => {
 			return {
@@ -70,14 +70,8 @@ const OrderList: FC<OrderListProps> = ({
 								<Stack direction={"row"} spacing={1}>
 									<span>
 										{new Date(
-											order.createdAt * 1000,
-										).toLocaleString(undefined, {
-											year: "numeric",
-											month: "long",
-											day: "numeric",
-											hour: "numeric",
-											minute: "numeric",
-										})}
+											order.createdAt,
+										).toLocaleString()}
 									</span>
 									<span className="mx-2">|</span>
 									<span className="text-primary-500">

@@ -25,7 +25,7 @@ const ShippingAddress: FC<Props> = ({ checkoutUser, setCheckoutUser }) => {
 	const [showLoader, setShowLoader] = useState(false);
 	const [showAddressForm, setShowAddressForm] = useState(false);
 	const valid = useMemo(() => {
-		return handleVerifyAddress(checkoutUser.shippingAddress);
+		return handleVerifyAddress(checkoutUser.address);
 	}, [checkoutUser]);
 	useEffect(() => {
 		(async () => {
@@ -41,7 +41,7 @@ const ShippingAddress: FC<Props> = ({ checkoutUser, setCheckoutUser }) => {
 		setCheckoutUser((checkoutUser: CheckoutUserInterface) => {
 			return {
 				...checkoutUser,
-				shippingAddress: address,
+				address,
 			};
 		});
 	};
@@ -75,7 +75,7 @@ const ShippingAddress: FC<Props> = ({ checkoutUser, setCheckoutUser }) => {
 					showLoader={showLoader}
 					addressList={addressList || []}
 					isSelectable={true}
-					selected={checkoutUser.shippingAddress}
+					selected={checkoutUser.address}
 					onSelect={handleSetShippingAddress}
 				/>
 

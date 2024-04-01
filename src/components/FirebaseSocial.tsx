@@ -20,15 +20,16 @@ import { dispatch } from "store";
 import { UserInterface } from "interfaces/user.interface";
 import { useNavigate } from "react-router-dom";
 import OverlayLoader from "components/OverlayLoader";
+import { handleShowErrorToast } from "services/notification.service";
 // ==============================|| FIREBASE - SOCIAL BUTTON ||============================== //
 
 const provider = new GoogleAuthProvider();
 const FirebaseSocial = () => {
 	const navigate = useNavigate();
-	const [showLoader, setShowLoader] = useState(false);
+	const [showLoader, toggleShowLoader] = useBoolState(false);
 	const googleHandler = async () => {
 		try {
-			setShowLoader(true);
+			toggleShowLoader();
 			const firebaseRespose = await signInWithPopup(auth, provider);
 			const accessToken = await firebaseRespose.user.getIdToken();
 			localStorage.setItem("access_token", accessToken);
@@ -36,11 +37,11 @@ const FirebaseSocial = () => {
 			if (!user) {
 				user = await createUser(dispatch, firebaseRespose.user);
 			}
-			setShowLoader(false);
+			toggleShowLoader();
 			navigate("/");
-		} catch (err) {
-			toast.error("Something went wrong");
-			setShowLoader(false);
+		} catch (error) {
+			handleShowErrorToast("Something went wrong - " + error.code);
+			toggleShowLoader();
 		}
 	};
 

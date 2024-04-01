@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 // material-ui
 import {
-	Button,
 	Checkbox,
 	FormControlLabel,
 	FormHelperText,
@@ -15,7 +14,6 @@ import {
 // third party
 import * as Yup from "yup";
 import { Formik } from "formik";
-import { toast } from "react-toastify";
 import { EmailOutlined, LockOutlined } from "@mui/icons-material";
 // assets
 // import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
@@ -25,11 +23,8 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import Label from "components/Label/Label";
 import Input from "shared/Input/Input";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
-import { dispatch } from "store";
 import { handleShowErrorToast } from "services/notification.service";
 import useBoolState from "hooks/useBoolState";
-import { createUser, getUser } from "services/auth.service";
-import { setUser } from "store/reducers/user";
 import OverlayLoader from "components/OverlayLoader";
 
 // ============================|| FIREBASE - LOGIN ||============================ //
@@ -48,12 +43,9 @@ const LoginForm = () => {
 			);
 			const accessToken = await firebaseRespose.user.getIdToken();
 			localStorage.setItem("access_token", accessToken);
-			const user = await getUser();
-			dispatch(setUser(user));
 			toggleShowLoader();
 			navigate("/");
 		} catch (error) {
-			console.log(error.code);
 			if (error.code === "auth/invalid-login-credentials") {
 				handleShowErrorToast("Invalid Login Credentials");
 			} else {

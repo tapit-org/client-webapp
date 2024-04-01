@@ -23,6 +23,9 @@ const ViewProfile = () => {
 				profileImage={profileData.profileImage}
 				coverImage={profileData.coverImage}
 				contactButtons={profileData.contactButtons}
+				profileId={undefined}
+				socials={undefined}
+				vcard={undefined}
 			/>
 		);
 };

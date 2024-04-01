@@ -15,7 +15,10 @@ const ProfileList: FC<ProfileListProps> = ({ profileList, showLoader }) => {
 		);
 	if (profileList.length == 0)
 		return (
-			<Grid>No Profiles. Create your first order to get a profile!</Grid>
+			<Grid>
+				No Profiles. Place your first order and you'll get a profile
+				with it!
+			</Grid>
 		);
 	return (
 		<Box sx={{ flexGrow: 1 }} className="mb-6">
@@ -25,9 +28,6 @@ const ProfileList: FC<ProfileListProps> = ({ profileList, showLoader }) => {
 				justifyContent="space-between"
 				alignItems="stretch"
 			>
-				{/* <Grid xs={12} md={6}>
-									<NewProfileCard />
-								</Grid> */}
 				{profileList.map((item, index) => (
 					<Grid xs={12} md={6} key={index}>
 						<ProfileCard profileListItem={item} />

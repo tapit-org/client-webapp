@@ -18,6 +18,7 @@ const ACTION_ICONS = {
 	PHONE: <PhoneOutlined fontSize="small" />,
 };
 const DefaultProfileTemplate = ({
+	profileId,
 	name,
 	title,
 	company,
@@ -25,13 +26,29 @@ const DefaultProfileTemplate = ({
 	profileImage,
 	coverImage,
 	contactButtons,
+	socials,
+	vcard,
 }) => {
+	const downloadVCard = async (e: any) => {
+		e.preventDefault();
+		const element = document.createElement("a");
+		const file = new Blob([vcard], { type: "text/vcard" });
+		element.href = URL.createObjectURL(file);
+		element.download = "myFile.txt";
+		element.download = profileId + ".vcf";
+		document.body.appendChild(element); // Required for this to work in FireFox
+		element.click();
+	};
 	const renderContactButtons = (contactButtons: ContactButtonInterface[]) => {
 		return contactButtons
 			.filter((contactButton: any) => contactButton.enabled)
 			.map((contactButton: any) => (
 				<Tooltip title={contactButton.text} key={contactButton.id}>
-					<Link to={contactButton.link} className="my-2">
+					<Link
+						to={contactButton.link}
+						target="_blank"
+						className="my-2"
+					>
 						{ACTION_ICONS[contactButton.id]}
 					</Link>
 				</Tooltip>
@@ -39,28 +56,27 @@ const DefaultProfileTemplate = ({
 	};
 	const renderSocials = (socials: SocialButtonInterface[]) => {
 		return (
-			<div>
-				<Stack
-					className="p-2 bg-white dark:bg-neutral-800 rounded-full shadow-lg overflow-x-auto hiddenScrollbar m-4 justify-items-center"
-					direction="row"
-					justifyContent="center"
-					alignItems="center"
-					spacing={2}
-				>
-					{socials.map((item, index) => (
-						<Link className="w-10 h-10" key={index} to={item.link}>
-							<SocialIcon type={item.name} />
-						</Link>
-					))}
-				</Stack>
-			</div>
+			<Stack
+				className="p-2 bg-white dark:bg-neutral-800 rounded-full shadow-lg overflow-x-auto hiddenScrollbar m-4 justify-items-center w-100"
+				direction="row"
+				justifyContent="center"
+				alignItems="center"
+				spacing={2}
+			>
+				{socials.map((item, index) => (
+					<Link className="w-10 h-10" key={index} to={item.link}>
+						<SocialIcon type={item.name} />
+					</Link>
+				))}
+			</Stack>
 		);
 	};
 	return (
 		<Box
-			className="m-auto relative "
+			className="m-auto relative"
 			sx={{
 				maxWidth: 480,
+				height: `calc(100vh - ${80}px)`,
 			}}
 		>
 			<Grid container className="p-3">
@@ -77,7 +93,7 @@ const DefaultProfileTemplate = ({
 							className="flex flex-col p-3 rounded-2xl shadow-lg bg-white  dark:bg-black mx-5 relative"
 							style={{
 								marginTop: -60,
-								marginBottom: 100,
+								marginBottom: 0,
 							}}
 						>
 							<Stack
@@ -125,15 +141,11 @@ const DefaultProfileTemplate = ({
 									renderContactButtons(contactButtons)}
 
 								<Tooltip title="Save">
-									<Link to={""} className="my-2">
-										<DownloadOutlined fontSize="small" />
-									</Link>
-								</Tooltip>
-
-								<Tooltip title="Share">
-									<Link to={""} className="my-2">
-										<ShareOutlined fontSize="small" />
-									</Link>
+									<DownloadOutlined
+										style={{ cursor: "pointer" }}
+										onClick={downloadVCard}
+										fontSize="small"
+									/>
 								</Tooltip>
 							</Stack>
 							{about && (
@@ -150,11 +162,11 @@ const DefaultProfileTemplate = ({
 					</div>
 				</div>
 			</Grid>
-			{/* {socials.length > 0 && <Box className='absolute bottom-0 w-100 text-center m-auto' sx={{
-                maxWidth: 480
-            }}>
-                {renderSocials(socials)}
-            </Box>} */}
+			{socials.length > 0 && (
+				<Grid container className="p-3 w-100">
+					{renderSocials(socials)}
+				</Grid>
+			)}
 		</Box>
 	);
 };

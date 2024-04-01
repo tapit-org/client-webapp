@@ -71,26 +71,17 @@ const EditProfile = () => {
 	const [title, setTitle] = useState("");
 	const [company, setCompany] = useState("");
 	const [about, setAbout] = useState("");
+	const [phoneNumber, setPhoneNumber] = useState("");
+	const [phoneCode, setPhoneCode] = useState("");
+	const [showPhone, setShowPhone] = useState("");
+	const [email, setEmail] = useState("");
+	const [showEmail, setShowEmail] = useState("");
+	const [website, setWebsite] = useState("");
+	const [showWebsite, setShowWebsite] = useState("");
 	const [profileImage, setProfileImage] = useState("");
 	const [coverImage, setCoverImage] = useState("");
 	const [socials, setSocials] = useState<SocialButtonInterface[]>([]);
-	const [contactButtons, setContactButtons] = useState([
-		{
-			id: CONTACT_BUTTON_TYPES.EMAIL,
-			enabled: false,
-			link: "",
-		},
-		{
-			id: CONTACT_BUTTON_TYPES.PHONE,
-			enabled: false,
-			link: "",
-		},
-		{
-			id: CONTACT_BUTTON_TYPES.WEBSITE,
-			enabled: false,
-			link: "",
-		},
-	]);
+
 	const TABS = [
 		{
 			name: TAB_NAMES.PROFILE_DETAILS,
@@ -121,19 +112,19 @@ const EditProfile = () => {
 				/>
 			),
 		},
-		{
-			name: TAB_NAMES.CONTACT_BUTTONS,
-			icon: <AlternateEmail fontSize="small" />,
-			component: (
-				<>
-					<ContactButtons
-						contactButtons={contactButtons}
-						setContactButtons={setContactButtons}
-					/>
-					<Socials socials={socials} setSocials={setSocials} />
-				</>
-			),
-		},
+		// {
+		// 	name: TAB_NAMES.CONTACT_BUTTONS,
+		// 	icon: <AlternateEmail fontSize="small" />,
+		// 	component: (
+		// 		<>
+		// 			<ContactButtons
+		// 				contactButtons={contactButtons}
+		// 				setContactButtons={setContactButtons}
+		// 			/>
+		// 			<Socials socials={socials} setSocials={setSocials} />
+		// 		</>
+		// 	),
+		// },
 	];
 
 	useEffect(() => {
@@ -152,7 +143,6 @@ const EditProfile = () => {
 		setAbout(profileData.about);
 		setProfileImage(profileData.profileImage);
 		setCoverImage(profileData.coverImage);
-		setContactButtons(profileData.contactButtons);
 		setAbout(profileData.about);
 	};
 	const handleViewPreview = () => {
@@ -173,7 +163,7 @@ const EditProfile = () => {
 			title,
 			company,
 			socials: [],
-			contactButtons: contactButtons,
+			contactButtons: [],
 			about,
 			theme: PROFILE_THEMES.DEFAULT,
 			profileImage: profileImage,
@@ -298,7 +288,10 @@ const EditProfile = () => {
 						about={about}
 						profileImage={profileImage}
 						coverImage={coverImage}
-						contactButtons={contactButtons}
+						contactButtons={[]}
+						profileId={undefined}
+						socials={undefined}
+						vcard={undefined}
 					/>
 				</Modal>
 			</Grid>

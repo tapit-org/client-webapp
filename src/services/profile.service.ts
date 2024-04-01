@@ -8,7 +8,7 @@ import {
 
 export const getProfileCardList = async (uid: string) => {
 	// Axios call to backend
-	const response = await axios.get(`${API_URL}/users/akshatakamath/profiles`);
+	const response = await axios.get(`${API_URL}/profile`);
 	console.log("Getting Profiles", response);
 	const profileList: ProfileListItemInterface[] = response.data;
 	console.log(profileList);
@@ -16,29 +16,24 @@ export const getProfileCardList = async (uid: string) => {
 };
 
 export const getProfile = async (profileId: string) => {
-	const response = await axios.get(`${API_URL}/profiles/${profileId}`);
+	const response = await axios.get(`${API_URL}/profile/${profileId}`);
 	console.log("Getting Profiles", response);
 	const profile: ProfileInterface = response.data;
 	console.log(profile);
 	return profile;
 };
 
-export const createProfile = async (
-	profileId: string,
-	name: string,
-	theme: PROFILE_THEMES,
-) => {
+export const createProfile = async (id: string, name: string) => {
 	try {
-		const response = await axios.post(`${API_URL}/profiles`, {
-			profileId,
-			theme,
+		const response = await axios.post(`${API_URL}/profile`, {
+			id,
 			name,
-			status: PROFILE_STATUS.PENDING,
 		});
 		console.log(response);
 		console.log(response.data);
 		return response.data;
 	} catch (error: any) {
+		console.log(error);
 		return error.response;
 	}
 };
@@ -46,7 +41,7 @@ export const createProfile = async (
 export const updateProfile = async (profileData: ProfileInterface) => {
 	try {
 		const response = await axios.patch(
-			`${API_URL}/profiles/${profileData.profileId}`,
+			`${API_URL}/profile/${profileData.profileId}`,
 			profileData,
 		);
 		console.log(response);

@@ -32,5 +32,5 @@ export interface CheckoutUserInterface {
 	name: string;
 	phoneCode: string;
 	phone: string;
-	shippingAddress: any;
+	address: any;
 }

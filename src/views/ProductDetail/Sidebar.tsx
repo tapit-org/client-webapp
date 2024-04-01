@@ -63,11 +63,12 @@ const Sidebar: FC<SidebarPageProps> = ({ product }) => {
 						>
 							<StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
 							<div className="ml-1.5 flex">
-								<span>{product.rating.toString()}</span>
-								<span className="block mx-2">·</span>
-								<span className="text-slate-600 dark:text-slate-400 underline">
-									{product.reviewCount.toString()} reviews
-								</span>
+								{product.totalRating == 0
+									? "No Reviews"
+									: `${(
+											product.totalRating /
+											product.reviewCount
+									  ).toString()} · ${product.reviewCount.toString()} Reviews`}
 							</div>
 						</a>
 						<span className="hidden sm:block mx-2.5">·</span>

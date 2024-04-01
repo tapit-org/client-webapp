@@ -5,7 +5,7 @@ export interface ProductListItemInterface {
 	thumbnail: string;
 	category: string;
 	tag: string;
-	rating: number;
+	totalRating: number;
 	reviewCount: number;
 	status?: "ACTIVE" | "INACTIVE" | "SOLD OUT";
 }
@@ -23,7 +23,7 @@ export interface ProductInterface {
 	images: string[];
 	category: string;
 	tag: string;
-	rating: number;
+	totalRating: number;
 	reviewCount: number;
 	description: string;
 	features: ProductFeatureInterface[];
@@ -31,11 +31,10 @@ export interface ProductInterface {
 }
 
 export interface ProductReviewInterface {
-	id?: string;
-	createdAt: number;
-	review: string;
+	id: string;
+	uid: string;
+	text: string;
 	rating: number;
-	productId?: string;
-	userId?: string;
-	userName: string;
+	name: string;
+	createdAt: Date;
 }

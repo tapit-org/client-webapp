@@ -20,15 +20,12 @@ const getLabelText = (value: number): string => {
 };
 const CreateReview: FC<CreateReviewProps> = ({ onCreate }) => {
 	const [rating, setRating] = useState<number>(5);
-	const [reviewText, setReviewText] = useState<string>("");
+	const [text, setText] = useState<string>("");
 	const [hover, setHover] = React.useState<number>(-1);
 	return (
 		<Stack
-			sx={{
-				height: "100%",
-			}}
 			spacing={3}
-			className="p-2"
+			className="p-4"
 			justifyContent={"center"}
 			// alignItems={"center"}
 		>
@@ -38,8 +35,8 @@ const CreateReview: FC<CreateReviewProps> = ({ onCreate }) => {
 				</Label>
 				<Textarea
 					className="mt-2 p-4"
-					value={reviewText}
-					onChange={(e) => setReviewText(e.target.value)}
+					value={text}
+					onChange={(e) => setText(e.target.value)}
 				/>
 			</FormControl>
 			<Stack
@@ -77,7 +74,7 @@ const CreateReview: FC<CreateReviewProps> = ({ onCreate }) => {
 				sizeClass="py-2 px-4"
 				fontSize="text-sm font-medium"
 				className="bg-slate-50 dark:bg-slate-800 !rounded-lg"
-				onClick={() => onCreate(reviewText, rating)}
+				onClick={() => onCreate(text, rating)}
 			>
 				Create
 			</ButtonPrimary>

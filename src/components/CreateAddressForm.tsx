@@ -51,7 +51,7 @@ const CreateAddressForm: FC<CreateAddressFormProps> = ({ callback, hide }) => {
 			return;
 		}
 		setShowLoader(true);
-		const response = await createAddress(uid, newAddress);
+		const response = await createAddress(newAddress);
 		console.log(response);
 		if (response.status == 400) {
 			handleShowErrorToast(response.data);

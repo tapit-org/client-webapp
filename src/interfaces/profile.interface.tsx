@@ -17,13 +17,16 @@ export enum CONTACT_BUTTON_TYPES {
 	WEBSITE = "WEBSITE",
 	PHONE = "PHONE",
 }
-
+export interface ImageInterface {
+	filename: string | null;
+	url: string | null;
+}
 export interface ProfileListItemInterface {
-	profileId: string;
+	id: string;
 	name: string;
 	theme: PROFILE_THEMES;
 	status: PROFILE_STATUS;
-	profileImage?: string;
+	profileImage?: ImageInterface;
 	createdAt: number;
 }
 

@@ -9,11 +9,9 @@ export interface ReviewItemProps {
 	review?: ProductReviewInterface;
 }
 
-function formatTimeDifference(timestamp: number) {
-	const currentTime = Date.now();
-	const timestampDate = new Date(timestamp * 1000); // Convert seconds to milliseconds
-
-	const timeDifference = currentTime - timestampDate.getTime();
+function formatTimeDifference(date: any) {
+	const currentTime = new Date();
+	const timeDifference = currentTime.getTime() - new Date(date).getTime();
 	const secondsDifference = Math.floor(timeDifference / 1000);
 	console.log(secondsDifference);
 	if (secondsDifference >= 86400) {
@@ -38,7 +36,7 @@ const ReviewItem: FC<ReviewItemProps> = ({ review }) => {
 					<Avatar
 						sizeClass="h-10 w-10 text-lg"
 						radius="rounded-full"
-						userName={review.userName}
+						userName={review.name}
 						imgUrl={""}
 					/>
 				</div>
@@ -46,23 +44,19 @@ const ReviewItem: FC<ReviewItemProps> = ({ review }) => {
 				<div className="flex-1 flex justify-between">
 					<div className="text-sm sm:text-base">
 						<span className="block font-semibold">
-							{review.userName}
+							{review.name}
 						</span>
 						<span className="block mt-0.5 text-slate-500 dark:text-slate-400 text-xs">
 							{formatTimeDifference(review.createdAt)}
 						</span>
 					</div>
 
-					<Rating
-						defaultValue={review.rating}
-						precision={0.1}
-						readOnly
-					/>
+					<Rating value={review.rating} precision={0.1} readOnly />
 				</div>
 			</div>
 			<div className="mt-4 prose prose-sm sm:prose dark:prose-invert sm:max-w-2xl">
 				<p className="text-slate-600 dark:text-slate-300">
-					{review.review}
+					{review.text}
 				</p>
 			</div>
 		</div>

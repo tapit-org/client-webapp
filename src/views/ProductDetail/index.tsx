@@ -65,7 +65,7 @@ const ProductDetailPage = () => {
 							<Reviews
 								setProduct={setProduct}
 								productId={product.id}
-								rating={product.rating}
+								totalRating={product.totalRating}
 								reviewCount={product.reviewCount}
 							/>
 						</div>

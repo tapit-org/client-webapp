@@ -36,18 +36,19 @@ export interface ContactButtonInterface {
 	link: string;
 	text?: string;
 }
+
 export interface ProfileInterface {
 	id: string;
 	uid: string;
 	name: string;
 	title: string;
 	company: string;
-	phoneNumber: string;
+	phone: string;
 	phoneCode: string;
 	email: string;
 	website: string;
 	mapLink: string;
-	visibleButtons: string[];
+	visibleButtons: ("phone" | "email" | "website" | "mapLink")[];
 	about: string;
 	vcard: string;
 	socials: SocialButtonInterface[];

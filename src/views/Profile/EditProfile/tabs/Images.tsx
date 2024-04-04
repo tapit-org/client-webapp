@@ -17,12 +17,7 @@ import AddImage from "views/Profile/components/AddImage";
 import ImageSlider from "views/Profile/components/ImageSlider";
 import ImageUploadButton from "views/Profile/components/ImageUploadButton";
 
-const Images = ({
-	profileImage,
-	setProfileImage,
-	coverImage,
-	setCoverImage,
-}) => {
+const Images = ({ profileImage, coverImage, updateData }) => {
 	const [profileImages, setProfileImages] = useState([]);
 	const [coverImages, setCoverImages] = useState([]);
 	const [images, setImages] = useState([]);
@@ -32,17 +27,7 @@ const Images = ({
 		useState("");
 	const [selectedCoverImageName, setSelectedCoverImageName] = useState("");
 	const [showProfileImageModal, setShowProfileImageModal] = useState(false);
-	useEffect(() => {
-		if (profileImageBase64) {
-			setProfileImage(profileImageBase64);
-		}
-	}, [profileImageBase64]);
 
-	useEffect(() => {
-		if (coverImageBase64) {
-			setCoverImage(coverImageBase64);
-		}
-	}, [coverImageBase64]);
 	const handleShowProfileImageModal = () => {
 		setShowProfileImageModal(true);
 	};
@@ -60,7 +45,10 @@ const Images = ({
 		base64Image: string,
 		fileName: string,
 	) => {
+		console.log(base64Image, fileName);
 		const newImage = await uploadImage(base64Image, fileName, "profile");
+		console.log(newImage);
+		console.log(profileImages);
 		setProfileImages((prev) => [newImage, ...prev]);
 	};
 	const handleUploadCoverImage = async (
@@ -74,17 +62,17 @@ const Images = ({
 		filename: string,
 		type: "profile" | "cover",
 	) => {
-		const response = await deleteImage(filename, type);
-		console.log(response);
-		if (type == "profile") {
-			setProfileImages((prev) =>
-				prev.filter((image) => image.filename != filename),
-			);
-		} else {
-			setCoverImage((prev) =>
-				prev.filter((image) => image.filename != filename),
-			);
-		}
+		// const response = await deleteImage(filename, type);
+		// console.log(response);
+		// if (type == "profile") {
+		// 	setProfileImages((prev) =>
+		// 		prev.filter((image) => image.filename != filename),
+		// 	);
+		// } else {
+		// 	setCoverImage((prev) =>
+		// 		prev.filter((image) => image.filename != filename),
+		// 	);
+		// }
 	};
 	return (
 		<Stack spacing={3} className="pb-4">
@@ -102,26 +90,26 @@ const Images = ({
 						</Stack>
 						<Stack direction={"row"} spacing={2}>
 							<AddImage
-								setImages={setProfileImages}
 								cropHeight={400}
 								cropWidth={400}
 								circularCrop
 								handleUpload={handleUploadProfileImage}
 							/>
-							<ImageSlider
-								key={profileImages.length}
-								images={profileImages}
-								selected={selectedProfileImageName}
-								aspectRatio={1}
-								rounded
-								handleSelect={(image) => {
-									setProfileImage(image.url);
-									setSelectedProfileImageName(image.filename);
-								}}
-								handleDelete={(filename) =>
-									handleDeleteImage(filename, "profile")
-								}
-							/>
+							{profileImages && (
+								<ImageSlider
+									key={profileImages.length}
+									images={profileImages}
+									selected={profileImage}
+									aspectRatio={1}
+									rounded
+									handleSelect={(image) => {
+										updateData("profileImage", image);
+									}}
+									handleDelete={(filename) =>
+										handleDeleteImage(filename, "profile")
+									}
+								/>
+							)}
 						</Stack>
 					</Stack>
 				</Stack>
@@ -140,24 +128,24 @@ const Images = ({
 						</Stack>
 						<Stack direction={"row"} spacing={2}>
 							<AddImage
-								setImages={setCoverImages}
 								cropHeight={400}
 								cropWidth={600}
 								handleUpload={handleUploadCoverImage}
 							/>
-							<ImageSlider
-								key={coverImages.length}
-								images={coverImages}
-								selected={selectedCoverImageName}
-								aspectRatio={2 / 3}
-								handleSelect={(image) => {
-									setCoverImage(image.url);
-									setSelectedCoverImageName(image.filename);
-								}}
-								handleDelete={(filename) => {
-									deleteImage(filename, "cover");
-								}}
-							/>
+							{coverImages && (
+								<ImageSlider
+									key={coverImages.length}
+									images={coverImages}
+									selected={coverImage}
+									aspectRatio={2 / 3}
+									handleSelect={(image) => {
+										updateData("coverImage", image);
+									}}
+									handleDelete={(filename) => {
+										deleteImage(filename, "cover");
+									}}
+								/>
+							)}
 						</Stack>
 					</Stack>
 				</Stack>

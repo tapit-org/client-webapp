@@ -75,7 +75,9 @@ const DefaultProfileTemplate = ({ data }) => {
 							<NcImage
 								containerClassName="relative h-0 aspect-h-9 aspect-w-16 rounded-xl overflow-hidden"
 								className="w-full rounded-2xl object-cover"
-								src={data.coverImage.url}
+								src={
+									data.coverImage ? data.coverImage.url : null
+								}
 							/>
 						</div>
 						<div

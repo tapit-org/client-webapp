@@ -22,7 +22,6 @@ import { convertHeic, uploadImage } from "services/image.service";
 import { useSelector } from "react-redux";
 
 const AddImage = ({
-	setImages,
 	cropHeight,
 	cropWidth,
 	circularCrop = false,

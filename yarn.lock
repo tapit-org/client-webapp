@@ -10742,6 +10742,11 @@ react-image-crop@^10.1.5:
   resolved "https://registry.npmjs.org/react-image-crop/-/react-image-crop-10.1.8.tgz"
   integrity sha512-4rb8XtXNx7ZaOZarKKnckgz4xLMvds/YrU6mpJfGhGAsy2Mg4mIw1x+DCCGngVGq2soTBVVOxx2s/C6mTX9+pA==
 
+react-international-phone@^4.2.6:
+  version "4.2.6"
+  resolved "https://registry.npmjs.org/react-international-phone/-/react-international-phone-4.2.6.tgz"
+  integrity sha512-El/ZVYmov5uGuk07nrfxe7M3/4Y8HhA9c3aCpAwilbPU8DekISwNSZMplqxzvxS+TIavIh28ZMDDx1u/4GqULg==
+
 "react-is@^16.12.0 || ^17.0.0 || ^18.0.0", react-is@^18.0.0, react-is@^18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.2.0.tgz"

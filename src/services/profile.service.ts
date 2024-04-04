@@ -40,6 +40,8 @@ export const createProfile = async (id: string, name: string) => {
 
 export const updateProfile = async (profileData: ProfileInterface) => {
 	try {
+		delete profileData["createdAt"];
+		delete profileData["updatedAt"];
 		const response = await axios.patch(
 			`${API_URL}/profile/${profileData.id}`,
 			profileData,

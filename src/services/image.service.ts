@@ -14,7 +14,7 @@ const dataURLtoBlob = (dataURL) => {
 export const getImageList = async (type: "profile" | "cover") => {
 	const response = await axios.get(`${API_URL}/image/list/${type}`);
 	console.log(response);
-	return response.data.signedUrls;
+	return response.data;
 };
 
 export const uploadImage = async (

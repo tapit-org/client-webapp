@@ -1,24 +1,84 @@
 .dashed-box {
-    background-image: repeating-linear-gradient(0deg, #333333, #333333 12px, transparent 12px, transparent 22px, #333333 22px), repeating-linear-gradient(90deg, #333333, #333333 12px, transparent 12px, transparent 22px, #333333 22px), repeating-linear-gradient(180deg, #333333, #333333 12px, transparent 12px, transparent 22px, #333333 22px), repeating-linear-gradient(270deg, #333333, #333333 12px, transparent 12px, transparent 22px, #333333 22px);
-    background-size: 1px 100%, 100% 1px, 1px 100%, 100% 1px;
-    background-position: 0 0, 0 0, 100% 0, 0 100%;
-    background-repeat: no-repeat;
+	background-image: repeating-linear-gradient(
+			0deg,
+			#333333,
+			#333333 12px,
+			transparent 12px,
+			transparent 22px,
+			#333333 22px
+		),
+		repeating-linear-gradient(
+			90deg,
+			#333333,
+			#333333 12px,
+			transparent 12px,
+			transparent 22px,
+			#333333 22px
+		),
+		repeating-linear-gradient(
+			180deg,
+			#333333,
+			#333333 12px,
+			transparent 12px,
+			transparent 22px,
+			#333333 22px
+		),
+		repeating-linear-gradient(
+			270deg,
+			#333333,
+			#333333 12px,
+			transparent 12px,
+			transparent 22px,
+			#333333 22px
+		);
+	background-size:
+		1px 100%,
+		100% 1px,
+		1px 100%,
+		100% 1px;
+	background-position:
+		0 0,
+		0 0,
+		100% 0,
+		0 100%;
+	background-repeat: no-repeat;
 }
 
 .text-center {
-    text-align: center !important;
+	text-align: center !important;
 }
 .ql-container {
-    border: none !important;
+	border: none !important;
 }
-.ql-editor { 
-    height: 300px  !important;
+.ql-editor {
+	height: 300px !important;
+	font-size: 14px !important;
 }
 
 .rounded-circle {
-    border-radius: 50%;
+	border-radius: 50%;
 }
 
 .font-weight-bold {
-    font-weight: bold;
+	font-weight: bold;
+}
+
+/* Phone Input */
+.react-international-phone-input-container {
+	width: 100% !important;
+}
+.react-international-phone-input-container
+	.react-international-phone-country-selector-button {
+	padding: 21px 15px 21px 20px !important;
+}
+
+.react-international-phone-input-container .react-international-phone-input {
+	width: 100% !important;
+	padding: 21px 5px 21px 10px !important;
+	font-size: 0.875rem !important;
+	line-height: 1.25rem !important;
+}
+input:focus {
+	--tw-ring-color: none !important;
+	border-color: rgb(229, 231, 235) !important;
 }

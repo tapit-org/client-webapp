@@ -1,58 +1,29 @@
 import {
-	AccessibilityNewOutlined,
 	AlternateEmail,
-	ArrowBackIosNewOutlined,
-	ArrowForwardIosOutlined,
-	BusinessOutlined,
-	EmailOutlined,
 	ImageOutlined,
-	LinkOutlined,
-	NotesOutlined,
 	PersonOutlined,
 	RemoveRedEye,
-	ResetTvOutlined,
 	RestartAltOutlined,
 	SaveOutlined,
-	TitleOutlined,
 } from "@mui/icons-material";
-import {
-	Box,
-	CircularProgress,
-	Grid,
-	Paper,
-	Stack,
-	Tooltip,
-	Typography,
-} from "@mui/material";
-import {
-	CONTACT_BUTTON_TYPES,
-	PROFILE_STATUS,
-	PROFILE_THEMES,
-	ProfileInterface,
-} from "interfaces/profile.interface";
+import { CircularProgress, Grid, Paper, Stack } from "@mui/material";
+import { ProfileInterface } from "interfaces/profile.interface";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getProfile, updateProfile } from "services/profile.service";
-import Input from "shared/Input/Input";
 import DefaultProfileTemplate from "../templates/Default";
 import Nav from "shared/Nav/Nav";
 import NavItem2 from "components/NavItem2";
-import Textarea from "shared/Textarea/Textarea";
 import ProfileForm from "./tabs/ProfileForm";
 import Images from "./tabs/Images";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
-import ContactButtons from "./tabs/ContactButtons";
-import AboutForm from "./tabs/AboutForm";
 import { useMediaQuery } from "react-responsive";
 import Socials from "./tabs/Socials";
-import { SocialButtonInterface } from "interfaces/social.interface";
 import Modal from "components/Modal";
 const TAB_NAMES = {
 	PROFILE_DETAILS: "Profile",
 	IMAGES: "Images",
-	CONTACT_BUTTONS: "Links",
-	ABOUT: "About",
 	SOCIALS: "Socials",
 };
 
@@ -74,6 +45,7 @@ const EditProfile = () => {
 			};
 		});
 	};
+
 	const TABS = [
 		{
 			name: TAB_NAMES.PROFILE_DETAILS,
@@ -87,31 +59,31 @@ const EditProfile = () => {
 				</>
 			),
 		},
-		// {
-		// 	name: TAB_NAMES.IMAGES,
-		// 	icon: <ImageOutlined fontSize="small" />,
-		// 	component: (
-		// 		<Images
-		// 			profileImage={profileImage}
-		// 			setProfileImage={setProfileImage}
-		// 			coverImage={coverImage}
-		// 			setCoverImage={setCoverImage}
-		// 		/>
-		// 	),
-		// },
-		// {
-		// 	name: TAB_NAMES.CONTACT_BUTTONS,
-		// 	icon: <AlternateEmail fontSize="small" />,
-		// 	component: (
-		// 		<>
-		// 			<ContactButtons
-		// 				contactButtons={contactButtons}
-		// 				setContactButtons={setContactButtons}
-		// 			/>
-		// 			<Socials socials={socials} setSocials={setSocials} />
-		// 		</>
-		// 	),
-		// },
+		{
+			name: TAB_NAMES.IMAGES,
+			icon: <ImageOutlined fontSize="small" />,
+			component: (
+				<Images
+					profileImage={profileData?.profileImage}
+					coverImage={profileData?.coverImage}
+					updateData={handleUpdateProfileData}
+				/>
+			),
+		},
+		{
+			name: TAB_NAMES.SOCIALS,
+			icon: <AlternateEmail fontSize="small" />,
+			component: (
+				<>
+					<Socials
+						socials={profileData?.socials}
+						updateSocials={(social) =>
+							handleUpdateProfileData("socials", social)
+						}
+					/>
+				</>
+			),
+		},
 	];
 	const handleInitProfileData = async (id: string) => {
 		setShowLoader(true);
@@ -137,7 +109,7 @@ const EditProfile = () => {
 		console.log(response);
 		setShowLoader(false);
 	};
-	if (showLoader)
+	if (showLoader || !profileData)
 		return (
 			<Stack
 				alignItems={"center"}
@@ -155,7 +127,7 @@ const EditProfile = () => {
 						<Stack spacing={1}>
 							<Nav
 								className="p-1 bg-white dark:bg-neutral-800 rounded-full w-full shadow-lg overflow-x-auto hiddenScrollbar"
-								containerClassName="mb-6 lg:mb-6 relative flex  w-full text-sm md:text-base"
+								containerClassName="mb-4 lg:mb-4 relative flex  w-full text-sm md:text-base"
 							>
 								<Grid container>
 									{TABS.map((item, index) => (

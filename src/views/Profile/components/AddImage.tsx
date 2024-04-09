@@ -22,7 +22,6 @@ import { convertHeic, uploadImage } from "services/image.service";
 import { useSelector } from "react-redux";
 
 const AddImage = ({
-	setImages,
 	cropHeight,
 	cropWidth,
 	circularCrop = false,
@@ -138,18 +137,19 @@ const AddImage = ({
 			/>
 			<Stack
 				sx={{
-					p: 2,
-					borderRadius: 4,
-					cursor: "pointer",
 					height: 100,
 					minWidth: 100,
 				}}
 				className="bg-primary-50"
 				alignItems={"center"}
 				justifyContent={"center"}
-				onClick={() => inputRef.current.click()}
 			>
-				<Add />
+				<IconButton
+					onClick={() => inputRef.current.click()}
+					sx={{ borderRadius: 2, width: "100%", height: "100%" }}
+				>
+					<Add />
+				</IconButton>
 			</Stack>
 		</>
 	);

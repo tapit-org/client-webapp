@@ -1,22 +1,13 @@
-import facebookLogo from "images/socials/facebook.svg"
-import twitterLogo from "images/socials/twitter.svg"
-import whatsappLogo from "images/socials/whatsapp.svg"
-import vimeoLogo from "images/socials/vimeo.svg"
-import telegramLogo from "images/socials/telegram.svg"
-import youtubeLogo from "images/socials/youtube.svg"
+import { SOCIAL_ICONS } from "interfaces/social.interface";
 
-const ICONS = {
-    FACEBOOK: facebookLogo,
-    TWITTER: twitterLogo,
-    WHATSAPP: whatsappLogo,
-    VIMEO: vimeoLogo,
-    TELEGRAM: telegramLogo,
-    YOUTUBE: youtubeLogo
-}
-
-const SocialIcon = ({ type }) => {
-	return <img alt={type} src={ICONS[type]}>
-    </img>
+const SocialIcon = ({ type, size = 10 }) => {
+	return (
+		<img
+			className={`w-${size} h-${size}`}
+			alt={type}
+			src={SOCIAL_ICONS[type]}
+		></img>
+	);
 };
 
 export default SocialIcon;

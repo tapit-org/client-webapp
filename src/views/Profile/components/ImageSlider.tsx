@@ -5,13 +5,14 @@ import Glide from "@glidejs/glide";
 import NcImage from "shared/NcImage/NcImage";
 import { Button, IconButton } from "@mui/material";
 import { Delete, DeleteOutline } from "@mui/icons-material";
+import { ImageInterface } from "interfaces/profile.interface";
 
 export interface ImageSliderProps {
-	images: any[];
-	selected: any;
+	images: ImageInterface[];
+	selected: ImageInterface | null;
 	aspectRatio: number;
 	rounded?: boolean;
-	handleSelect: (image: any) => void;
+	handleSelect: (image: ImageInterface) => void;
 	handleDelete: (filename: string) => void;
 }
 
@@ -92,6 +93,7 @@ const ImageSlider: FC<ImageSliderProps> = ({
 			slider.destroy();
 		};
 	}, [sliderRef, UNIQUE_CLASS]);
+	console.log(images);
 	return (
 		<div
 			style={{
@@ -129,7 +131,6 @@ const ImageSlider: FC<ImageSliderProps> = ({
 										}}
 									/>
 								</IconButton>
-
 								<NcImage
 									onClick={() => handleSelect(image)}
 									containerClassName={`w-full relative h-0  ${
@@ -140,7 +141,8 @@ const ImageSlider: FC<ImageSliderProps> = ({
 										rounded ? "rounded-full" : "rounded-xl"
 									} overflow-hidden`}
 									className={`w-full p-1 ${
-										selected == image.filename
+										selected &&
+										selected.filename == image.filename
 											? "bg-primary-200"
 											: ""
 									} ${

@@ -5,6 +5,7 @@ import {
 	EmailOutlined,
 	LanguageOutlined,
 	LocationOnOutlined,
+	Map,
 	PhoneOutlined,
 	ShareOutlined,
 } from "@mui/icons-material";
@@ -16,6 +17,7 @@ const ACTION_ICONS = {
 	WEBSITE: <LanguageOutlined fontSize="small" />,
 	EMAIL: <EmailOutlined fontSize="small" />,
 	PHONE: <PhoneOutlined fontSize="small" />,
+	MAP: <Map fontSize="small" />,
 };
 const DefaultProfileTemplate = ({ data }) => {
 	const downloadVCard = async (e: any) => {
@@ -28,20 +30,78 @@ const DefaultProfileTemplate = ({ data }) => {
 		document.body.appendChild(element); // Required for this to work in FireFox
 		element.click();
 	};
-	const renderContactButtons = (contactButtons: ContactButtonInterface[]) => {
-		return contactButtons
-			.filter((contactButton: any) => contactButton.enabled)
-			.map((contactButton: any) => (
-				<Tooltip title={contactButton.text} key={contactButton.id}>
-					<Link
-						to={contactButton.link}
-						target="_blank"
-						className="my-2"
-					>
-						{ACTION_ICONS[contactButton.id]}
-					</Link>
-				</Tooltip>
-			));
+	const renderContactButtons = (data: any) => {
+		return data.visibleButtons.map((visibleButton: string) => {
+			if (visibleButton == "phone") {
+				return (
+					<Tooltip title={"Phone"} key={visibleButton}>
+						<Link
+							to={`tel:${data.phone}`}
+							target="_blank"
+							className="my-2"
+						>
+							{ACTION_ICONS["PHONE"]}
+						</Link>
+					</Tooltip>
+				);
+			}
+			if (visibleButton == "email") {
+				return (
+					<Tooltip title={"Email"} key={visibleButton}>
+						<Link
+							to={`mailto:${data.email}`}
+							target="_blank"
+							className="my-2"
+						>
+							{ACTION_ICONS["EMAIL"]}
+						</Link>
+					</Tooltip>
+				);
+			}
+			if (visibleButton == "mapLink") {
+				return (
+					<Tooltip title={"Map"} key={visibleButton}>
+						<Link
+							to={`mailto:${data.email}`}
+							target="_blank"
+							className="my-2"
+						>
+							{ACTION_ICONS["MAP"]}
+						</Link>
+					</Tooltip>
+				);
+			}
+			if (visibleButton == "webiste") {
+				return (
+					<Tooltip title={"Webiste"} key={visibleButton}>
+						<Link
+							to={data.website}
+							target="_blank"
+							className="my-2"
+						>
+							{ACTION_ICONS["WEBSITE"]}
+						</Link>
+					</Tooltip>
+				);
+			}
+			if (visibleButton == "vcard") {
+				return (
+					<Tooltip title={"Save"} key={visibleButton}>
+						<DownloadOutlined
+							style={{ cursor: "pointer" }}
+							onClick={downloadVCard}
+							fontSize="small"
+						/>
+					</Tooltip>
+				);
+			}
+		});
+	};
+	const isValidLink = (social: SocialButtonInterface) => {
+		if (social.link != "") {
+			return true;
+		}
+		return false;
 	};
 	const renderSocials = (socials: SocialButtonInterface[]) => {
 		return (
@@ -52,10 +112,18 @@ const DefaultProfileTemplate = ({ data }) => {
 				alignItems="center"
 				spacing={2}
 			>
-				{socials.map((item, index) => (
-					<Link className="w-10 h-10" key={index} to={item.link}>
-						<SocialIcon type={item.name} />
-					</Link>
+				{socials.map((social, index) => (
+					<Box key={index}>
+						{isValidLink(social) ? (
+							<Link key={index} to={social.link}>
+								<SocialIcon type={social.type} />
+							</Link>
+						) : (
+							<Tooltip title="Invalid Link">
+								<SocialIcon type={social.type} />
+							</Tooltip>
+						)}
+					</Box>
 				))}
 			</Stack>
 		);
@@ -75,7 +143,9 @@ const DefaultProfileTemplate = ({ data }) => {
 							<NcImage
 								containerClassName="relative h-0 aspect-h-9 aspect-w-16 rounded-xl overflow-hidden"
 								className="w-full rounded-2xl object-cover"
-								src={data.coverImage.url}
+								src={
+									data.coverImage ? data.coverImage.url : null
+								}
 							/>
 						</div>
 						<div
@@ -129,16 +199,7 @@ const DefaultProfileTemplate = ({ data }) => {
 								direction={"row"}
 								spacing={2}
 							>
-								{/* {contactButtons &&
-									renderContactButtons(contactButtons)} */}
-
-								<Tooltip title="Save">
-									<DownloadOutlined
-										style={{ cursor: "pointer" }}
-										onClick={downloadVCard}
-										fontSize="small"
-									/>
-								</Tooltip>
+								{renderContactButtons(data)}
 							</Stack>
 							{data.about && (
 								<div className="m-3">

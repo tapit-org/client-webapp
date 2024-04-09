@@ -5,57 +5,137 @@ import {
 	EmailOutlined,
 	PhoneOutlined,
 	Add,
+	ArrowDropDown,
 } from "@mui/icons-material";
 import {
-	Box,
-	Button,
-	Checkbox,
+	ClickAwayListener,
 	IconButton,
 	Paper,
 	Stack,
 	Switch,
 	Tooltip,
-	Typography,
 } from "@mui/material";
 import DraggableList from "components/DraggableList";
 import { CONTACT_BUTTON_TYPES } from "interfaces/profile.interface";
-import { useEffect, useState } from "react";
-import Input from "shared/Input/Input";
-import FACEBOOK_IMG from "images/social/facebook.png";
 import {
 	SOCIAL_TYPES,
+	SOCIAL_TYPE_LIST,
 	SocialButtonInterface,
 } from "interfaces/social.interface";
-import ButtonPrimary from "shared/Button/ButtonPrimary";
-import ButtonSecondary from "shared/Button/ButtonSecondary";
-import Modal from "components/Modal";
-const SOCIAL_ICONS = {
-	FACBOOK: <img width={30} src={FACEBOOK_IMG} alt={SOCIAL_TYPES.FACEBOOK} />,
-	WHATSAPP: <img width={30} src={FACEBOOK_IMG} alt={SOCIAL_TYPES.FACEBOOK} />,
-	FACEBOOK: <img width={30} src={FACEBOOK_IMG} alt={SOCIAL_TYPES.FACEBOOK} />,
-	TWITTER: <img width={30} src={FACEBOOK_IMG} alt={SOCIAL_TYPES.FACEBOOK} />,
-	VIMEO: <img width={30} src={FACEBOOK_IMG} alt={SOCIAL_TYPES.FACEBOOK} />,
+import Input from "shared/Input/Input";
+import SocialIcon from "views/Profile/components/SocialIcon";
+import Popper from "@mui/base/Popper";
+import { useState } from "react";
+import DraggableListItem from "components/DraggableList/DraggableListItem";
+import IconInput from "components/IconInput";
+import VisibilityToggleButton from "components/VisibilityButton";
+const ACTION_ICONS = {
+	WEBSITE: <LanguageOutlined fontSize="small" />,
+	EMAIL: <EmailOutlined fontSize="small" />,
+	PHONE: <PhoneOutlined fontSize="small" />,
 };
 
-const SocialButtonCard = ({ item, setItem, toggleItem }) => {
+const SocialCard = ({ social, updateSocial, socialTypeList }) => {
+	const [anchorEl, setAnchorEl] = useState(null);
+	const handleShowSocialOptions = (event) => {
+		setAnchorEl(anchorEl ? null : event.currentTarget);
+	};
+	const open = Boolean(anchorEl);
+	const popperId = `${social.type}-popper`;
 	return (
-		<Stack direction={"row"} spacing={2}>
-			<img width={30} src={FACEBOOK_IMG} alt={item.name} />
-		</Stack>
+		<Paper elevation={0} className="mx-0 my-2 w-full">
+			<Stack direction="row" alignItems="center" spacing={1}>
+				<DragIndicatorOutlined />
+				<Popper
+					id={popperId}
+					open={open}
+					anchorEl={anchorEl}
+					placement={"bottom-start"}
+				>
+					<Paper elevation={1} sx={{ mt: 1, p: 1, maxWidth: 300 }}>
+						<Stack direction={"row"} spacing={2} flexWrap={"wrap"}>
+							{socialTypeList.map((socialType: string) => (
+								<IconButton
+									key={socialType}
+									size="small"
+									onClick={() =>
+										updateSocial(social.type, {
+											...social,
+											type: socialType,
+										})
+									}
+								>
+									<SocialIcon
+										key={socialType}
+										type={socialType}
+										size={7}
+									/>
+								</IconButton>
+							))}
+						</Stack>
+					</Paper>
+				</Popper>
+				<IconInput
+					name={social.type}
+					value={social.link}
+					setValue={(value: string) =>
+						updateSocial(social.type, {
+							...social,
+							link: value,
+						})
+					}
+					placeholder={"Website"}
+					disabled={!social.enabled}
+					left={
+						<Stack
+							direction={"row"}
+							justifyContent={"center"}
+							alignItems={"center"}
+							spacing={0.5}
+							sx={{
+								position: "relative",
+								minWidth: 30,
+							}}
+						>
+							<SocialIcon type={social.type} size={7} />
+							<IconButton
+								size="small"
+								onClick={handleShowSocialOptions}
+								sx={{
+									position: "absolute",
+									bottom: -5,
+									left: 12,
+									padding: 0.5,
+								}}
+							>
+								<ArrowDropDown
+									fontSize="small"
+									className="bg-primary-500 rounded-2xl text-white"
+									sx={{
+										fontSize: 15,
+									}}
+								/>
+							</IconButton>
+						</Stack>
+					}
+					right={
+						<VisibilityToggleButton
+							isVisible={social.enabled}
+							toggle={() =>
+								updateSocial(social.type, {
+									...social,
+									enabled: !social.enabled,
+								})
+							}
+						/>
+					}
+				/>
+			</Stack>
+		</Paper>
 	);
 };
 
-const Socials = ({ socials, setSocials }) => {
-	useEffect(() => {
-		setSocials(
-			Object.keys(SOCIAL_ICONS).map((social) => {
-				return {
-					name: social,
-					link: "",
-				};
-			}),
-		);
-	}, []);
+const Socials = ({ socials, updateSocials }) => {
 	const handleGetLinkFromText = (id: string, text: string) => {
 		if (id == CONTACT_BUTTON_TYPES.EMAIL) {
 			return "mailto:" + text;
@@ -65,81 +145,97 @@ const Socials = ({ socials, setSocials }) => {
 			return text;
 		}
 	};
-	const handleSetSocial = (name: string, link: string) => {
-		setSocials((prev: SocialButtonInterface[]) => {
-			return prev.map((social: SocialButtonInterface) => {
-				if (social.name == name) {
+	const handleUpdateSocial = (
+		type: string,
+		newSocial: SocialButtonInterface,
+	) => {
+		updateSocials(
+			socials.map((social: any) => {
+				if (social.type == type) {
 					return {
-						name: name,
-						link: link,
+						...newSocial,
+						link: handleGetLinkFromText(
+							newSocial.type,
+							newSocial.link,
+						),
 					};
 				} else {
 					return social;
 				}
-			});
-		});
+			}),
+		);
 	};
-	const handleToggleItem = (name: string) => {
-		// setContactButtons((contactButtons: any) => {
-		// 	return contactButtons.map((actionButton: any) => {
-		// 		if (actionButton.id == id) {
-		// 			return {
-		// 				...actionButton,
-		// 				enabled: !actionButton.enabled,
-		// 			};
-		// 		} else {
-		// 			return actionButton;
-		// 		}
-		// 	});
-		// });
-	};
-	const [showSelectSocialModal, setShowSelectSocialModal] = useState(false);
-	const handleOpenSelectSocialModal = () => {
-		setShowSelectSocialModal(true);
-	};
-	const handleCloseSelectSocialModal = () => {
-		setShowSelectSocialModal(false);
-	};
-	const handleAddSocial = () => {
-		setSocials((prev: SocialButtonInterface[]) => [
-			...prev,
+	const handleAddNewSocial = () => {
+		console.log(SOCIAL_TYPES);
+		updateSocials([
+			...socials,
 			{
-				name: "FACEBOOK",
+				type: SOCIAL_TYPE_LIST.filter(
+					(socialType: string) =>
+						!socials
+							.map((social: SocialButtonInterface) => social.type)
+							.includes(socialType),
+				)[0],
 				link: "",
+				enabled: true,
 			},
 		]);
 	};
 	return (
 		<div>
-			<Modal
-				show={showSelectSocialModal}
-				onCloseModalQuickView={handleCloseSelectSocialModal}
-				title="Select Social"
+			<DraggableList
+				items={socials}
+				setItems={updateSocials}
+				idKey="type"
 			>
-				<Stack direction={"row"} spacing={2}>
-					{Object.keys(SOCIAL_TYPES).map(
-						(socialType: string) =>
-							SOCIAL_ICONS[SOCIAL_TYPES[socialType]],
-					)}
+				{socials.map((social: SocialButtonInterface) => {
+					return (
+						<SocialCard
+							key={social.type}
+							social={social}
+							updateSocial={handleUpdateSocial}
+							socialTypeList={SOCIAL_TYPE_LIST.filter(
+								(socialType) =>
+									!socials
+										.map(
+											(social: SocialButtonInterface) =>
+												social.type,
+										)
+										.includes(socialType),
+							)}
+						/>
+					);
+				})}
+			</DraggableList>
+			<Stack sx={{ py: 1 }}>
+				<Stack
+					className="bg-primary-50"
+					alignItems={"center"}
+					justifyContent={"center"}
+				>
+					<IconButton
+						onClick={handleAddNewSocial}
+						sx={{ borderRadius: 2, width: "100%" }}
+					>
+						<Add />
+					</IconButton>
 				</Stack>
-			</Modal>
-			<Stack direction={"row"} spacing={2}>
-				<DraggableList items={socials} setItems={setSocials}>
-					{socials.map((social: SocialButtonInterface) => {
-						return (
-							<SocialButtonCard
-								key={social.name}
-								item={social}
-								setItem={handleSetSocial}
-								toggleItem={handleToggleItem}
-							/>
-						);
-					})}
-				</DraggableList>
-			</Stack>
-			<IconButton onClick={handleOpenSelectSocialModal}>
+				{/* <Stack
+				sx={{
+					p: 2,
+					borderRadius: 4,
+					cursor: "pointer",
+					height: 100,
+					minWidth: 100,
+				}}
+				
+				alignItems={"center"}
+				justifyContent={"center"}
+				onClick={() => inputRef.current.click()}
+			>
 				<Add />
-			</IconButton>
+			</Stack> */}
+			</Stack>
 		</div>
 	);
 };

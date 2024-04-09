@@ -1,6 +1,9 @@
 import {
 	BusinessOutlined,
 	EmailOutlined,
+	LocationOnOutlined,
+	MapOutlined,
+	NotesOutlined,
 	PersonOutlined,
 	PhoneOutlined,
 	RemoveRedEye,
@@ -8,17 +11,31 @@ import {
 	VisibilityOffOutlined,
 	VisibilityOutlined,
 } from "@mui/icons-material";
-import { Grid, IconButton, Stack, Tooltip } from "@mui/material";
+import { Grid, IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import IconInput from "components/IconInput";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
+import VisibilityToggleButton from "components/VisibilityButton";
 
 const ProfileForm = ({ data, updateData }) => {
+	const toggleButtonVisibility = (buttonType: string) => {
+		if (data.visibleButtons.includes(buttonType)) {
+			updateData(
+				"visibleButtons",
+				data.visibleButtons.filter(
+					(visibleButton) => visibleButton != buttonType,
+				),
+			);
+		} else {
+			updateData("visibleButtons", [...data.visibleButtons, buttonType]);
+		}
+	};
 	return (
 		<form noValidate>
-			{JSON.stringify(data)}
 			<Grid container spacing={1} sx={{ pb: 2 }}>
-				<Grid item xs={6}>
+				<Grid item xs={12}>
 					<IconInput
 						name={"name"}
 						value={data.name}
@@ -48,38 +65,7 @@ const ProfileForm = ({ data, updateData }) => {
 						left={<BusinessOutlined fontSize="small" />}
 					/>
 				</Grid>
-				<Grid item xs={12} md={6}>
-					<IconInput
-						name={"website"}
-						value={data.website}
-						setValue={(value: string) =>
-							updateData("website", value)
-						}
-						placeholder={"Website"}
-						disabled={!data.showWebsite}
-						left={<BusinessOutlined fontSize="small" />}
-						right={
-							<Tooltip title={data.showWebsite ? "Hide" : "Show"}>
-								<IconButton
-									onClick={() =>
-										updateData(
-											"showWebsite",
-											!data.showWebsite,
-										)
-									}
-								>
-									{data.showWebsite ? (
-										<VisibilityOutlined fontSize="small" />
-									) : (
-										<VisibilityOffOutlined fontSize="small" />
-									)}
-								</IconButton>
-							</Tooltip>
-						}
-					/>
-				</Grid>
-			</Grid>
-			<Grid container spacing={1} sx={{ pb: 2 }}>
+
 				<Grid item xs={12} md={6}>
 					<IconInput
 						name={"phone"}
@@ -89,21 +75,25 @@ const ProfileForm = ({ data, updateData }) => {
 						left={<PhoneOutlined fontSize="small" />}
 						disabled={!data.showPhone}
 						right={
-							<Tooltip title={data.showPhone ? "Hide" : "Show"}>
-								<IconButton
-									onClick={() =>
-										updateData("showPhone", !data.showPhone)
-									}
-								>
-									{data.showPhone ? (
-										<VisibilityOutlined fontSize="small" />
-									) : (
-										<VisibilityOffOutlined fontSize="small" />
-									)}
-								</IconButton>
-							</Tooltip>
+							<VisibilityToggleButton
+								isVisible={data.visibleButtons.includes(
+									"phone",
+								)}
+								toggle={() => toggleButtonVisibility("phone")}
+							/>
 						}
-					/>
+					>
+						<PhoneInput
+							disabled={!data.visibleButtons.includes("phone")}
+							style={{
+								height: "100%",
+								width: "100%",
+							}}
+							defaultCountry="in"
+							value={data.phone}
+							onChange={(value) => updateData("phone", value)}
+						/>
+					</IconInput>
 				</Grid>
 				<Grid item xs={12} md={6}>
 					<IconInput
@@ -112,42 +102,93 @@ const ProfileForm = ({ data, updateData }) => {
 						setValue={(value: string) => updateData("email", value)}
 						placeholder={"Email"}
 						left={<EmailOutlined fontSize="small" />}
-						disabled={!data.showEmail}
+						disabled={!data.visibleButtons.includes("email")}
 						right={
-							<Tooltip title={data.showEmail ? "Hide" : "Show"}>
-								<IconButton
-									onClick={() =>
-										updateData("showEmail", !data.showEmail)
-									}
-								>
-									{data.showEmail ? (
-										<VisibilityOutlined fontSize="small" />
-									) : (
-										<VisibilityOffOutlined fontSize="small" />
-									)}
-								</IconButton>
-							</Tooltip>
+							<VisibilityToggleButton
+								isVisible={data.visibleButtons.includes(
+									"email",
+								)}
+								toggle={() => toggleButtonVisibility("email")}
+							/>
+						}
+					/>
+				</Grid>
+				<Grid item xs={12}>
+					<IconInput
+						name={"website"}
+						value={data.website}
+						setValue={(value: string) =>
+							updateData("website", value)
+						}
+						placeholder={"Website"}
+						disabled={!data.visibleButtons.includes("website")}
+						left={<BusinessOutlined fontSize="small" />}
+						right={
+							<VisibilityToggleButton
+								isVisible={data.visibleButtons.includes(
+									"website",
+								)}
+								toggle={() => toggleButtonVisibility("website")}
+							/>
+						}
+					/>
+				</Grid>
+				<Grid item xs={12} md={12}>
+					<IconInput
+						name={"mapLink"}
+						value={data.mapLink}
+						setValue={(value: string) =>
+							updateData("mapLink", value)
+						}
+						placeholder={"Google Map Link"}
+						left={<LocationOnOutlined fontSize="small" />}
+						disabled={!data.visibleButtons.includes("mapLink")}
+						right={
+							<VisibilityToggleButton
+								isVisible={data.visibleButtons.includes(
+									"mapLink",
+								)}
+								toggle={() => toggleButtonVisibility("mapLink")}
+							/>
 						}
 					/>
 				</Grid>
 			</Grid>
 			<Grid container spacing={1} sx={{ pb: 2 }}>
 				<Grid item xs={12}>
-					<ReactQuill
-						placeholder="Bio..."
-						style={{
-							border: "1px solid #E5E7EB",
-							borderRadius: 10,
-							padding: 8,
-						}}
-						className="h-100"
-						theme="snow"
-						value={data.about}
-						onChange={(value: string) => updateData("about", value)}
-						modules={{
-							toolbar: false,
-						}}
-					/>
+					<Stack>
+						<Stack direction={"row"}>
+							<span className="p-2.5 inline-flex items-center rounded-tl-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+								<NotesOutlined fontSize="small" />
+							</span>
+							<span className="w-100 p-2.5 inline-flex items-center rounded-tr-2xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+								<Typography
+									variant="subtitle2"
+									className="px-1"
+								>
+									About
+								</Typography>
+							</span>
+						</Stack>
+
+						<ReactQuill
+							style={{
+								border: "1px solid #E5E7EB",
+								borderRadius: "0px 0px 16px 16px",
+								padding: "8px",
+							}}
+							placeholder="Start typing here..."
+							className="h-100"
+							theme="snow"
+							value={data.about}
+							onChange={(value: string) =>
+								updateData("about", value)
+							}
+							modules={{
+								toolbar: false,
+							}}
+						/>
+					</Stack>
 				</Grid>
 			</Grid>
 		</form>

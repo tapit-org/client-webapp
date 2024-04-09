@@ -1,4 +1,4 @@
-import axios, { EXPRESS_API_URL } from "axios.config";
+import axios, { API_URL } from "axios.config";
 const dataURLtoBlob = (dataURL) => {
 	const arr = dataURL.split(",");
 	const mime = arr[0].match(/:(.*?);/)[1];
@@ -12,7 +12,7 @@ const dataURLtoBlob = (dataURL) => {
 };
 
 export const getImageList = async (type: "profile" | "cover") => {
-	const response = await axios.get(`${EXPRESS_API_URL}/image/list/${type}`);
+	const response = await axios.get(`${API_URL}/image/list/${type}`);
 	console.log(response);
 	return response.data.signedUrls;
 };
@@ -28,7 +28,7 @@ export const uploadImage = async (
 		formData.append("image", dataURLtoBlob(base64Image));
 		formData.append("filename", filename);
 		const response = await axios.post(
-			`${EXPRESS_API_URL}/image/upload/${type}`,
+			`${API_URL}/image/upload/${type}`,
 			formData,
 			{
 				headers: {
@@ -52,10 +52,10 @@ export const deleteImage = async (
 		console.log(
 			filename,
 			type,
-			`${EXPRESS_API_URL}/image/delete/${filename}/${filename}`,
+			`${API_URL}/image/delete/${filename}/${filename}`,
 		);
 		const response = await axios.delete(
-			`${EXPRESS_API_URL}/image/delete/${type}/${filename}`,
+			`${API_URL}/image/delete/${type}/${filename}`,
 		);
 		console.log(response);
 		return response.data.signedUrl;
@@ -70,7 +70,7 @@ export const convertHeic = async (imageFile, filename) => {
 		formData.append("image", imageFile);
 		formData.append("filename", filename);
 		const response = await axios.post(
-			`${EXPRESS_API_URL}/image/convert/heic`,
+			`${API_URL}/image/convert/heic`,
 			formData,
 			{
 				headers: {

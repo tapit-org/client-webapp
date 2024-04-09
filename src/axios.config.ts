@@ -1,10 +1,5 @@
 import axios from "axios";
-
-export const HOSTED_API_URL =
-	"https://tapit-api.60d2s3vplc2ba.ap-south-1.cs.amazonlightsail.com";
-export const API_URL = "http://127.0.0.1:5000";
-// export const EXPRESS_API_URL = "http://127.0.0.1:8080/api/v1";
-export const EXPRESS_API_URL = "http://localhost:8000/api/v0";
+export const API_URL = `${process.env.REACT_APP_API_URL}/api/v0`;
 axios.interceptors.request.use((config) => {
 	const access_token = localStorage.getItem("access_token");
 	if (access_token) {

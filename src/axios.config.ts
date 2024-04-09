@@ -1,5 +1,5 @@
 import axios from "axios";
-export const API_URL = "http://127.0.0.1:8080/api/v1";
+export const API_URL = "http://127.0.0.1:8000/api/v1";
 axios.interceptors.request.use((config) => {
 	const access_token = localStorage.getItem("access_token");
 	if (access_token) {

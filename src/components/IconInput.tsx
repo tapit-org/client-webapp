@@ -12,7 +12,7 @@ const IconInput = ({
 	disabled = false,
 	children = null,
 }) => (
-	<Stack direction={"row"}>
+	<Stack direction={"row"} sx={{ width: "100%" }}>
 		{left && (
 			<span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
 				{left}

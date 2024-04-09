@@ -17,20 +17,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
-
-const VisibilityToggleButton = ({ isVisible, toggle }) => {
-	return (
-		<Tooltip title={isVisible ? "Hide" : "Show"}>
-			<IconButton onClick={toggle}>
-				{isVisible ? (
-					<VisibilityOutlined fontSize="small" />
-				) : (
-					<VisibilityOffOutlined fontSize="small" />
-				)}
-			</IconButton>
-		</Tooltip>
-	);
-};
+import VisibilityToggleButton from "components/VisibilityButton";
 
 const ProfileForm = ({ data, updateData }) => {
 	const toggleButtonVisibility = (buttonType: string) => {

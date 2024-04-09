@@ -49,9 +49,11 @@ export interface ProfileInterface {
 	website: string;
 	mapLink: string;
 	visibleButtons: ("phone" | "email" | "website" | "mapLink")[];
+	buttonIconPack: string;
 	about: string;
 	vcard: string;
 	socials: SocialButtonInterface[];
+	socialIconPack: string;
 	profileImage: ImageInterface | null;
 	coverImage: ImageInterface | null;
 	theme: PROFILE_THEMES;

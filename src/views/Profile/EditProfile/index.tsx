@@ -125,7 +125,6 @@ const EditProfile = () => {
 				<Grid item xs={12} md={6} lg={8}>
 					<Paper elevation={1} className="p-4 mt-3">
 						<Stack spacing={1}>
-							{JSON.stringify(profileData)}
 							<Nav
 								className="p-1 bg-white dark:bg-neutral-800 rounded-full w-full shadow-lg overflow-x-auto hiddenScrollbar"
 								containerClassName="mb-4 lg:mb-4 relative flex  w-full text-sm md:text-base"

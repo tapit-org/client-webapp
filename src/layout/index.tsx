@@ -14,6 +14,7 @@ import { User, deleteUser } from "@firebase/auth";
 import { UserInterface } from "interfaces/user.interface";
 import OverlayLoader from "components/OverlayLoader";
 import { auth } from "firebaseConfig";
+import Footer from "shared/Footer/Footer";
 
 // ==============================|| MINIMAL LAYOUT ||============================== //
 
@@ -87,6 +88,7 @@ const Layout = ({ restricted = false, redirect = false }) => {
 				<ScrollToTop />
 				<Header />
 				<Outlet />
+				<Footer />
 			</>
 		);
 	}

@@ -1,12 +1,27 @@
-import { Helmet } from 'react-helmet-async';
-import ProductCard from 'components/ProductCard';
-import { PRODUCTS } from 'data/data';
-import ButtonCircle from 'shared/Button/ButtonCircle';
-import Input from 'shared/Input/Input';
-import TabFilters from 'components/TabFilters';
-import ProductList from 'components/ProductList';
+import { Helmet } from "react-helmet-async";
+import ProductCard from "components/ProductCard";
+import { PRODUCTS } from "data/data";
+import ButtonCircle from "shared/Button/ButtonCircle";
+import Input from "shared/Input/Input";
+import TabFilters from "components/TabFilters";
+import ProductList from "components/ProductList";
+import { useEffect, useState } from "react";
+import { ProductListItemInterface } from "interfaces/product.interface";
+import { getProductList } from "services/product.service";
+import { CircularProgress, Stack } from "@mui/material";
 
 const ProductCollection = () => {
+	const [showLoader, setShowLoader] = useState(false);
+	const [filters, setFilters] = useState(null);
+
+	const handleUpdateFiltersByKey = (key: string, newValue: any) => {
+		setFilters((prev) => {
+			return {
+				...prev,
+				[key]: newValue,
+			};
+		});
+	};
 	return (
 		<div data-nc-id="ProductCollection">
 			<Helmet>
@@ -24,16 +39,20 @@ const ProductCollection = () => {
 								Products
 							</h2>
 							<span className="block mt-4 text-neutral-500 dark:text-neutral-400 text-sm sm:text-base">
-								We not only help you design exceptional products, but also make it
-								easy for you to share your designs with more like-minded people.
+								We not only help you design exceptional
+								products, but also make it easy for you to share
+								your designs with more like-minded people.
 							</span>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div className="container">
+			{/* <div className="container">
 				<header className="max-w-2xl mx-auto -mt-10 flex flex-col lg:-mt-7">
-					<form className="relative w-full" onSubmit={(e) => e.preventDefault()}>
+					<form
+						className="relative w-full"
+						onSubmit={(e) => e.preventDefault()}
+					>
 						<label
 							htmlFor="search-input"
 							className="text-neutral-500 dark:text-neutral-300"
@@ -80,14 +99,37 @@ const ProductCollection = () => {
 						</label>
 					</form>
 				</header>
-			</div>
+			</div> */}
 			<div className="container py-16 lg:pb-28 lg:pt-20 space-y-16 sm:space-y-20 lg:space-y-28">
 				<div className="space-y-10 lg:space-y-14">
 					<main>
-						<TabFilters />
-                        <div className='my-5'> 
-						    <ProductList/>
-                        </div>
+						{/* {filters && (
+							<TabFilters
+								filters={filters}
+								handleUpdateFiltersByKey={
+									handleUpdateFiltersByKey
+								}
+							/>
+						)} */}
+
+						<div className="my-5">
+							{showLoader ? (
+								<Stack
+									className="w-100 py-5"
+									alignItems={"center"}
+									justifyContent={"center"}
+								>
+									<CircularProgress />
+								</Stack>
+							) : (
+								<ProductList
+									filters={filters}
+									handleInitFilters={(newFilters) =>
+										setFilters(newFilters)
+									}
+								/>
+							)}
+						</div>
 					</main>
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import Heading from "components/Heading/Heading";
 import { ProductListItemInterface } from "interfaces/product.interface";
 import { getProductList } from "services/product.service";
@@ -10,6 +10,8 @@ export interface ProductListProps {
 	heading?: string;
 	subHeading?: string;
 	type?: "LIST" | "SLIDER";
+	filters?: any;
+	handleInitFilters?: (newFilters: any) => void;
 }
 
 const renderProductList = (
@@ -45,6 +47,8 @@ const ProductList: FC<ProductListProps> = ({
 	heading,
 	subHeading,
 	type = "LIST",
+	filters = null,
+	handleInitFilters = (newFilters) => {},
 }) => {
 	const [productList, setProductList] =
 		useState<ProductListItemInterface[]>(null);
@@ -56,6 +60,48 @@ const ProductList: FC<ProductListProps> = ({
 			setShowLoader(false);
 		})();
 	}, []);
+
+	useEffect(() => {
+		if (productList && productList.length != 0) {
+			const priceList = productList.map(
+				(product: ProductListItemInterface) => product.price,
+			);
+			const categories = Array.from(
+				new Set(
+					productList.map(
+						(product: ProductListItemInterface) => product.category,
+					),
+				),
+			);
+			handleInitFilters({
+				lowerPriceRange: 0,
+				upperPriceRange: Math.max(...priceList),
+				minPriceLimit: 0,
+				maxPriceLimit: Math.max(...priceList),
+				categories: categories,
+				selectedCategories: categories,
+			});
+		}
+	}, [productList]);
+
+	const filteredProductList = useMemo(() => {
+		if (productList) {
+			if (filters) {
+				return productList.filter((product) => {
+					let bool = true;
+					if (
+						product.price < filters.lowerPriceRange ||
+						product.price > filters.upperPriceRange
+					) {
+						bool = false;
+					}
+					return bool;
+				});
+			}
+			return productList;
+		}
+		return [];
+	}, [productList, filters]);
 	return (
 		<div>
 			{heading && (
@@ -76,7 +122,7 @@ const ProductList: FC<ProductListProps> = ({
 					<CircularProgress />
 				</Stack>
 			) : (
-				renderProductList(productList, type)
+				renderProductList(filteredProductList, type)
 			)}
 		</div>
 	);

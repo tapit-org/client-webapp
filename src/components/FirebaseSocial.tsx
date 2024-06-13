@@ -24,7 +24,7 @@ import { handleShowErrorToast } from "services/notification.service";
 // ==============================|| FIREBASE - SOCIAL BUTTON ||============================== //
 
 const provider = new GoogleAuthProvider();
-const FirebaseSocial = () => {
+const FirebaseSocial = ({ callback = null }) => {
 	const navigate = useNavigate();
 	const [showLoader, toggleShowLoader] = useBoolState(false);
 	const googleHandler = async () => {
@@ -37,8 +37,12 @@ const FirebaseSocial = () => {
 			if (!user) {
 				user = await createUser(dispatch, firebaseRespose.user);
 			}
+			if (callback) {
+				callback();
+			} else {
+				navigate("/");
+			}
 			toggleShowLoader();
-			navigate("/");
 		} catch (error) {
 			handleShowErrorToast("Something went wrong - " + error.code);
 			toggleShowLoader();

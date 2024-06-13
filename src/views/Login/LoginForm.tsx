@@ -29,7 +29,7 @@ import OverlayLoader from "components/OverlayLoader";
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
-const LoginForm = () => {
+const LoginForm = ({ callback = null }) => {
 	const navigate = useNavigate();
 	const [showLoader, toggleShowLoader] = useBoolState(false);
 	const [checked, setChecked] = React.useState(false);
@@ -44,7 +44,11 @@ const LoginForm = () => {
 			const accessToken = await firebaseRespose.user.getIdToken();
 			localStorage.setItem("access_token", accessToken);
 			toggleShowLoader();
-			navigate("/");
+			if (callback) {
+				callback();
+			} else {
+				navigate("/");
+			}
 		} catch (error) {
 			if (error.code === "auth/invalid-login-credentials") {
 				handleShowErrorToast("Invalid Login Credentials");

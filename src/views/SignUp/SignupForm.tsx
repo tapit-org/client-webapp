@@ -41,7 +41,7 @@ import OverlayLoader from "components/OverlayLoader";
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
-const SignupForm = () => {
+const SignupForm = ({ callback = null }) => {
 	const navigate = useNavigate();
 	const [showLoader, toggleShowLoader] = useBoolState(false);
 	const validatePassword = (password: string, confirmPassword: string) => {
@@ -77,7 +77,11 @@ const SignupForm = () => {
 			const user = await createUser(dispatch, firebaseRespose.user, name);
 			dispatch(setUser(user));
 			toggleShowLoader();
-			navigate("/");
+			if (callback) {
+				callback();
+			} else {
+				navigate("/");
+			}
 		} catch (error) {
 			console.log(error.code);
 			if (error.code === "auth/email-already-in-use") {

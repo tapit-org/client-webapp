@@ -1,9 +1,12 @@
 import { NoSymbolIcon, CheckIcon } from "@heroicons/react/24/outline";
-import { Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import CartQuantityEditor from "components/ChangeCartQuantity";
 import CostTable from "components/CostTable";
+import Modal from "components/Modal";
 import Prices from "components/Prices";
 import { CartItemInterface } from "interfaces/cart.interface";
+import LoginModal from "modals/LoginModal";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
@@ -58,10 +61,11 @@ const Cart = () => {
 		if (user.uid) {
 			navigate("/checkout");
 		} else {
-			toast.error("Please login to checkout!", {
-				position: "bottom-right",
-			});
-			localStorage.setItem("next_route", "/checkout");
+			setShowLoginModal(true);
+			// toast.error("Please login to checkout!", {
+			// 	position: "bottom-right",
+			// });
+			// localStorage.setItem("next_route", "/checkout");
 		}
 	};
 
@@ -89,17 +93,31 @@ const Cart = () => {
 					<div>
 						<div className="flex justify-between ">
 							<div className="flex-[1.5] ">
-								<h3 className="text-base font-semibold">
-									<Link to={"/product/" + id}>{name}</Link>
-								</h3>
-								<p className="text-xs">Category - {category}</p>
-
-								<div className="mt-3 flex justify-between w-full relative">
-									<CartQuantityEditor cartItem={item} />
+								<div className="flex justify-between w-full relative">
+									<div>
+										<h3 className="text-base font-semibold">
+											<Link to={"/product/" + id}>
+												{name}
+											</Link>
+										</h3>
+										<p className="text-xs">
+											Category - {category}
+										</p>
+									</div>
 									<Prices
 										contentClass="py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium h-full"
 										price={quantity * price}
 									/>
+								</div>
+								<div className="mt-3 flex justify-between w-full relative">
+									<CartQuantityEditor cartItem={item} />
+									<a
+										onClick={() => handleRemoveProduct(id)}
+										href="##"
+										className="relative z-10 flex items-center font-medium text-sm "
+									>
+										<span>Remove</span>
+									</a>
 								</div>
 							</div>
 						</div>
@@ -107,112 +125,123 @@ const Cart = () => {
 
 					<div className="flex mt-auto pt-4 items-end justify-between text-sm">
 						{renderStatusInstock()}
-
-						<a
-							onClick={() => handleRemoveProduct(id)}
-							href="##"
-							className="relative z-10 flex items-center mt-3 font-medium text-sm "
-						>
-							<span>Remove</span>
-						</a>
 					</div>
 				</div>
 			</div>
 		);
 	};
-
+	const [showLoginModal, setShowLoginModal] = useState(false);
 	return (
 		<div className="nc-Cart">
 			<Helmet>
 				<title>Your Cart || Tap-it</title>
 			</Helmet>
-
-			<main className="container py-16 lg:pb-28 lg:pt-20 ">
-				<div className="mb-12 sm:mb-16">
-					<h2 className="block text-2xl sm:text-3xl lg:text-4xl font-semibold ">
-						Your Cart
-					</h2>
-				</div>
-
-				<hr className="border-slate-200 dark:border-slate-700 my-10 xl:my-12" />
-
-				<div className="flex flex-col lg:flex-row">
-					<div className="w-full lg:w-[60%] xl:w-[55%] divide-y divide-slate-200 dark:divide-slate-700 ">
-						{cart.length > 0 ? (
-							cart.map(renderProduct)
-						) : (
-							<Typography variant={"h5"}>
-								Cart is empty
-							</Typography>
-						)}
+			<LoginModal
+				showModal={showLoginModal}
+				handleToggleModal={() => setShowLoginModal((prev) => !prev)}
+			/>
+			{cart.length == 0 ? (
+				<Stack
+					direction={"column"}
+					spacing={2}
+					alignItems={"center"}
+					justifyContent={"center"}
+					sx={{
+						height: "50vh",
+					}}
+				>
+					<img
+						style={{ height: "250px" }}
+						src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png"
+						alt="empty-cart"
+					/>
+					<Typography variant="h5">Your cart is empty!</Typography>
+					<Link to="/products">
+						<ButtonPrimary>Start Shopping</ButtonPrimary>
+					</Link>
+				</Stack>
+			) : (
+				<main className="container py-16 lg:pb-28 lg:pt-20 ">
+					<div className="mb-12 sm:mb-16">
+						<h2 className="block text-2xl sm:text-3xl lg:text-4xl font-semibold ">
+							Your Cart
+						</h2>
 					</div>
-					<div className="border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-700 my-10 lg:my-0 lg:mx-10 xl:mx-16 2xl:mx-20 flex-shrink-0"></div>
-					<div className="flex-1">
-						<div className="sticky top-28">
-							<CostTable cart={cart} />
-							<ButtonPrimary
-								onClick={handleCheckout}
-								className="mt-8 w-full"
-								disabled={cart.length == 0}
-							>
-								Checkout
-							</ButtonPrimary>
-							<div className="mt-5 text-sm text-slate-500 dark:text-slate-400 flex items-center justify-center">
-								<p className="block relative pl-5">
-									<svg
-										className="w-4 h-4 absolute -left-1 top-0.5"
-										viewBox="0 0 24 24"
-										fill="none"
-									>
-										<path
-											d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
-											stroke="currentColor"
-											strokeWidth="1.5"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-										/>
-										<path
-											d="M12 8V13"
-											stroke="currentColor"
-											strokeWidth="1.5"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-										/>
-										<path
-											d="M11.9945 16H12.0035"
-											stroke="currentColor"
-											strokeWidth="2"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-										/>
-									</svg>
-									Learn more{` `}
-									<a
-										target="_blank"
-										rel="noopener noreferrer"
-										href="##"
-										className="text-slate-900 dark:text-slate-200 underline font-medium"
-									>
-										Taxes
-									</a>
-									<span>
-										{` `}and{` `}
-									</span>
-									<a
-										target="_blank"
-										rel="noopener noreferrer"
-										href="##"
-										className="text-slate-900 dark:text-slate-200 underline font-medium"
-									>
-										Shipping
-									</a>
-									{` `} infomation
-								</p>
+
+					<hr className="border-slate-200 dark:border-slate-700 my-10 xl:my-12" />
+
+					<div className="flex flex-col lg:flex-row">
+						<div className="w-full lg:w-[60%] xl:w-[55%] divide-y divide-slate-200 dark:divide-slate-700 ">
+							{cart.map(renderProduct)}
+						</div>
+						<div className="border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-700 my-10 lg:my-0 lg:mx-10 xl:mx-16 2xl:mx-20 flex-shrink-0"></div>
+						<div className="flex-1">
+							<div className="sticky top-28">
+								<CostTable cart={cart} />
+								<ButtonPrimary
+									onClick={handleCheckout}
+									className="mt-8 w-full"
+									disabled={cart.length == 0}
+								>
+									Checkout
+								</ButtonPrimary>
+								<div className="mt-5 text-sm text-slate-500 dark:text-slate-400 flex items-center justify-center">
+									<p className="block relative pl-5">
+										<svg
+											className="w-4 h-4 absolute -left-1 top-0.5"
+											viewBox="0 0 24 24"
+											fill="none"
+										>
+											<path
+												d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
+												stroke="currentColor"
+												strokeWidth="1.5"
+												strokeLinecap="round"
+												strokeLinejoin="round"
+											/>
+											<path
+												d="M12 8V13"
+												stroke="currentColor"
+												strokeWidth="1.5"
+												strokeLinecap="round"
+												strokeLinejoin="round"
+											/>
+											<path
+												d="M11.9945 16H12.0035"
+												stroke="currentColor"
+												strokeWidth="2"
+												strokeLinecap="round"
+												strokeLinejoin="round"
+											/>
+										</svg>
+										Learn more{` `}
+										<a
+											target="_blank"
+											rel="noopener noreferrer"
+											href="##"
+											className="text-slate-900 dark:text-slate-200 underline font-medium"
+										>
+											Taxes
+										</a>
+										<span>
+											{` `}and{` `}
+										</span>
+										<a
+											target="_blank"
+											rel="noopener noreferrer"
+											href="##"
+											className="text-slate-900 dark:text-slate-200 underline font-medium"
+										>
+											Shipping
+										</a>
+										{` `} infomation
+									</p>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</main>
+				</main>
+			)}
 		</div>
 	);
 };

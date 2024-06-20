@@ -16,7 +16,6 @@ export const getProfileCardList = async (uid: string) => {
 };
 
 export const getProfile = async (profileId: string) => {
-	console.log(`${API_URL}/profile/${profileId}`);
 	const response = await axios.get(`${API_URL}/profile/${profileId}`);
 	console.log("Getting Profiles", response);
 	const profile: ProfileInterface = response.data;

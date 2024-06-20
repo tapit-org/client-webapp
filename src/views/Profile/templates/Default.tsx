@@ -12,6 +12,8 @@ import { SocialButtonInterface } from "interfaces/social.interface";
 import SocialIcon from "views/Profile/components/SocialIcon";
 import NcImage from "shared/NcImage/NcImage";
 import { ContactButtonInterface } from "interfaces/profile.interface";
+import ButtonSecondary from "shared/Button/ButtonSecondary";
+import ButtonPrimary from "shared/Button/ButtonPrimary";
 const ACTION_ICONS = {
 	WEBSITE: <LanguageOutlined fontSize="small" />,
 	EMAIL: <EmailOutlined fontSize="small" />,
@@ -27,6 +29,7 @@ const DefaultProfileTemplate = ({
 	coverImage,
 	contactButtons,
 	socials,
+	customButton = null,
 	vcard,
 }) => {
 	const downloadVCard = async (e: any) => {
@@ -162,11 +165,30 @@ const DefaultProfileTemplate = ({
 					</div>
 				</div>
 			</Grid>
-			{socials.length > 0 && (
-				<Grid container className="p-3 w-100">
-					{renderSocials(socials)}
-				</Grid>
-			)}
+			<Grid container className="p-3 w-100">
+				{customButton && (
+					<Grid
+						item
+						xs={socials.length > 0 ? 4 : 12}
+						className="pr-3"
+					>
+						<a
+							target="_blank"
+							href={customButton.link}
+							rel="noreferrer"
+						>
+							<ButtonPrimary className="w-full p-2 m-4">
+								{customButton.label}
+							</ButtonPrimary>
+						</a>
+					</Grid>
+				)}
+				{socials.length > 0 && (
+					<Grid item className="w-full" xs={customButton ? 8 : 12}>
+						{renderSocials(socials)}
+					</Grid>
+				)}
+			</Grid>
 		</Box>
 	);
 };

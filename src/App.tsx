@@ -1,8 +1,8 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import ThemeRoutes from "routes";
 import { ToastContainer } from "react-toastify";
-import { ThemeProvider, createTheme } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css";
+import { ThemeProvider, createTheme } from "@mui/material";
 import { signOut } from "firebase/auth";
 import { auth } from "firebaseConfig";
 import { dispatch } from "store";

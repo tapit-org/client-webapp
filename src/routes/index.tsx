@@ -64,6 +64,10 @@ const PublicRoutes = {
 			element: <ViewProfile />,
 		},
 		{
+			path: "/@/:docId/:profileId",
+			element: <ViewProfile />,
+		},
+		{
 			path: "/profile/:profileId",
 			element: <ViewProfile />,
 		},

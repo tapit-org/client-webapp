@@ -48,4 +48,5 @@ export interface ProfileInterface {
 	profileImage: string | null;
 	coverImage: string | null;
 	vcard?: string | null;
+	customButton?: any;
 }

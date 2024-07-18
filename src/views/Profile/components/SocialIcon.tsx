@@ -6,6 +6,8 @@ import telegramLogo from "images/socials/telegram.svg";
 import youtubeLogo from "images/socials/youtube.svg";
 import instagramLogo from "images/social/instagram.png";
 
+import reviewsLogo from "images/socials/reviews.png";
+
 const ICONS = {
 	FACEBOOK: facebookLogo,
 	TWITTER: twitterLogo,
@@ -14,6 +16,7 @@ const ICONS = {
 	TELEGRAM: telegramLogo,
 	YOUTUBE: youtubeLogo,
 	INSTAGRAM: instagramLogo,
+	GOOGLE_REVIEWS: reviewsLogo,
 };
 
 const SocialIcon = ({ type }) => {

@@ -58,7 +58,7 @@ const Cart = () => {
 	};
 	const navigate = useNavigate();
 	const handleCheckout = () => {
-		if (user.uid) {
+		if (user.id) {
 			navigate("/checkout");
 		} else {
 			setShowLoginModal(true);

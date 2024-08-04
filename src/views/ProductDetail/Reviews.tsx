@@ -41,7 +41,7 @@ const Reviews: FC<ReviewPageProps> = ({
 	};
 	const handleShowCreateReviewModal = () => {
 		console.log(user);
-		if (!user.uid) {
+		if (!user.id) {
 			toast.error("Please login to leave a review.");
 			return;
 		}

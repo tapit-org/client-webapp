@@ -89,7 +89,7 @@ const CheckoutProduct: FC<CheckoutProductProps> = ({
 													value={profile.id}
 													sx={{ fontSize: "0.9em" }}
 												>
-													{profile.id}
+													{profile.profileName}
 												</MenuItem>
 											))}
 											<MenuItem

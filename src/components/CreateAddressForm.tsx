@@ -29,7 +29,7 @@ const ModalStyles = {
 	p: 4,
 };
 const CreateAddressForm: FC<CreateAddressFormProps> = ({ callback, hide }) => {
-	const uid = useSelector((state: any) => state.user.uid);
+	const uid = useSelector((state: any) => state.user.id);
 	const [showLoader, setShowLoader] = useState(false);
 	const [newAddress, setNewAddress] = useState<AddressInterface>({
 		name: "",

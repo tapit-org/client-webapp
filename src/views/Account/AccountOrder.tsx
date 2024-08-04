@@ -9,7 +9,7 @@ import ButtonSecondary from "shared/Button/ButtonSecondary";
 import CommonLayout from "views/Account/CommonLayout";
 
 const AccountOrder = () => {
-	const uid = useSelector((state: any) => state.user.uid);
+	const uid = useSelector((state: any) => state.user.id);
 	const [orderList, setOrderList] = useState([]);
 	const [productList, setProductList] = useState([]);
 	const [showLoader, setShowLoader] = useState(true);

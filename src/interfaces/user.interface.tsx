@@ -14,7 +14,7 @@ export enum USER_SOURCES {
 }
 
 export interface UserInterface {
-	uid: string;
+	id: string;
 	name: string;
 	email: string;
 	emailVerified: boolean;

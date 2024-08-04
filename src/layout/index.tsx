@@ -39,6 +39,7 @@ const Layout = ({ restricted = false, redirect = false }) => {
 				console.log("Creating user", creatingUser);
 				if (!creatingUser) {
 					const user = await getUser();
+					console.log("This is the user", user);
 					if (user) {
 						dispatch(setUser(user));
 					} else {
@@ -60,7 +61,7 @@ const Layout = ({ restricted = false, redirect = false }) => {
 		};
 
 		// (async () => {
-		// 	if (user.uid == null && user.loading == true) {
+		// 	if (user.id == null && user.loading == true) {
 		// 		const access_token = localStorage.getItem("access_token");
 		// 		if (access_token) {
 		// 			console.log(auth.currentUser);
@@ -80,7 +81,7 @@ const Layout = ({ restricted = false, redirect = false }) => {
 		// 	}
 		// })();
 	}, [creatingUser]);
-	if (!restricted || (user && user.uid)) {
+	if (!restricted || (user && user.id)) {
 		return (
 			<>
 				{loaders.length != 0 && <OverlayLoader />}

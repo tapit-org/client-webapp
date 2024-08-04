@@ -1,25 +1,11 @@
-import { Add, Edit } from "@mui/icons-material";
-import {
-	Box,
-	Divider,
-	Grid,
-	IconButton,
-	Stack,
-	Typography,
-} from "@mui/material";
-import CoverImageSlider from "components/CoverImageSlider";
+import { Add } from "@mui/icons-material";
+import { IconButton, Stack } from "@mui/material";
 import Modal from "components/Modal";
-import ProfileImageSlider from "components/ProfileImageSlider";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Crop } from "react-image-crop";
-import NcImage from "shared/NcImage/NcImage";
-import ImageSlider from "views/Profile/components/ImageSlider";
-import ImageUploadButton from "views/Profile/components/ImageUploadButton";
 import Cropper from "./Cropper";
-import NewCropper from "./NewCropper";
-import { convertHeic, uploadImage } from "services/image.service";
-import { useSelector } from "react-redux";
+import { convertHeic } from "services/image.service";
 
 const AddImage = ({
 	cropHeight,
@@ -28,11 +14,6 @@ const AddImage = ({
 	handleUpload,
 }) => {
 	const inputRef = useRef(null);
-
-	const [showProfileImageModal, setShowProfileImageModal] = useState(false);
-	const handleShowProfileImageModal = () => {
-		setShowProfileImageModal(true);
-	};
 
 	const [showCropperModal, setShowCropperModal] = useState(false);
 	const [compressedImg, setCompressedImg] = useState<File>();

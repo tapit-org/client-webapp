@@ -67,9 +67,9 @@ const CheckoutPage = () => {
 		});
 	};
 	useEffect(() => {
-		if (user.uid) {
+		if (user.id) {
 			setCheckoutUser({
-				uid: user.uid,
+				uid: user.id,
 				email: user.email,
 				name: user.name,
 				phone: user.phone,
@@ -77,7 +77,7 @@ const CheckoutPage = () => {
 				address: null,
 			});
 			(async () => {
-				setProfileList(await getProfileCardList(user.uid));
+				setProfileList(await getProfileCardList(user.id));
 			})();
 		}
 	}, [user]);

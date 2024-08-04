@@ -14,11 +14,11 @@ const ListProfiles = () => {
 	useEffect(() => {
 		const handleFetchProfiles = async (uid: string) => {
 			setShowLoader(true);
-			setProfileList(await getProfileCardList(user.uid));
+			setProfileList(await getProfileCardList(user.id));
 			setShowLoader(false);
 		};
-		if (user && user.uid) {
-			handleFetchProfiles(user.uid);
+		if (user && user.id) {
+			handleFetchProfiles(user.id);
 		}
 	}, [user]);
 

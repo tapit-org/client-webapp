@@ -23,6 +23,7 @@ export interface ImageInterface {
 }
 export interface ProfileListItemInterface {
 	id: string;
+	profileName: string;
 	name: string;
 	theme: PROFILE_THEMES;
 	status: PROFILE_STATUS;

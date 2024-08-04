@@ -11,7 +11,7 @@ import ButtonSecondary from "shared/Button/ButtonSecondary";
 import CommonLayout from "views/Account/CommonLayout";
 
 const AccountAddress = () => {
-	const uid = useSelector((state: any) => state.user.uid);
+	const uid = useSelector((state: any) => state.user.id);
 	const [addressList, setAddressList] = useState<AddressInterface[]>();
 	const [showLoader, setShowLoader] = useState(true);
 	const [showAddressForm, setShowAddressForm] = useState<boolean>(false);

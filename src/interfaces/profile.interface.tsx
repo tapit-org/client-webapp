@@ -2,25 +2,29 @@ import { SocialButtonInterface } from "./social.interface";
 
 export enum PROFILE_THEMES {
 	DEFAULT = "DEFAULT",
-	THEME2 = "THEME2",
+	DARK = "DARK",
 	THEME3 = "THEME3",
 }
 
+export enum PROFILE_ICON_PACKS {
+	DEFAULT = "DEFAULT",
+	ROUNDED = "ROUNDED",
+}
 export enum PROFILE_STATUS {
-	PENDING = "PENDING",
-	ACTIVE = "ACTIVE",
-	INACTIVE = "INACTIVE",
+	UNLINKED = "UNLINKED",
+	DRAFT = "DRAFT",
+	PUBLIC = "PUBLIC",
+	PRIVATE = "PRIVATE",
 }
 
 export enum CONTACT_BUTTON_TYPES {
-	EMAIL = "EMAIL",
-	WEBSITE = "WEBSITE",
-	PHONE = "PHONE",
+	EMAIL = "email",
+	WEBSITE = "website",
+	PHONE = "phone",
+	MAPLINK = "maplink",
+	VCARD = "vcard",
 }
-export interface ImageInterface {
-	filename: string | null;
-	url: string | null;
-}
+
 export interface ProfileListItemInterface {
 	id: string;
 	profileName: string;
@@ -38,27 +42,31 @@ export interface ContactButtonInterface {
 	text?: string;
 }
 
+export interface ImageInterface {
+	filename: string | null;
+	url: string | null;
+}
+
 export interface ProfileInterface {
 	id: string;
+	profileName: string;
+	status: PROFILE_STATUS;
 	uid: string;
 	name: string;
-	title: string;
-	company: string;
-	phone: string;
-	phoneCode: string;
-	email: string;
-	website: string;
-	mapLink: string;
-	visibleButtons: ("phone" | "email" | "website" | "mapLink")[];
-	buttonIconPack: string;
-	about: string;
-	vcard: string;
+	title: string | null;
+	company: string | null;
+	phone: string | null;
+	email: string | null;
+	mapLink: string | null;
 	socials: SocialButtonInterface[];
-	socialIconPack: string;
+	about: string | null;
+	theme: PROFILE_THEMES;
+	iconPack: PROFILE_ICON_PACKS;
 	profileImage: ImageInterface | null;
 	coverImage: ImageInterface | null;
-	theme: PROFILE_THEMES;
-	status: PROFILE_STATUS;
+	visibleButtons: CONTACT_BUTTON_TYPES[];
+	vcard: string | null;
+	customButton: any;
 	createdAt: Date;
 	updatedAt: Date;
 }

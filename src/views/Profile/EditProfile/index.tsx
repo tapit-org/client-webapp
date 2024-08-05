@@ -21,6 +21,7 @@ import ButtonSecondary from "shared/Button/ButtonSecondary";
 import { useMediaQuery } from "react-responsive";
 import Socials from "./tabs/Socials";
 import Modal from "components/Modal";
+import toast from "react-hot-toast";
 const TAB_NAMES = {
 	PROFILE_DETAILS: "Profile",
 	IMAGES: "Images",
@@ -107,6 +108,7 @@ const EditProfile = () => {
 		setShowLoader(true);
 		const response = await updateProfile(profileData);
 		console.log(response);
+		toast.success("Profile Updated");
 		setShowLoader(false);
 	};
 	if (showLoader || !profileData)

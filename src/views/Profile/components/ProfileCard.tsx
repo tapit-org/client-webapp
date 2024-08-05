@@ -62,11 +62,11 @@ const ProfileCard: FC<ProfileCardProps> = ({ profileListItem }) => {
 						},
 					}}
 				>
-					{profileListItem.name && (
+					{profileListItem.profileName && (
 						<h2
 							className={`text-xl md:text-2xl text-neutral-800 font-semibold`}
 						>
-							{profileListItem.name}
+							{profileListItem.profileName}
 						</h2>
 					)}
 					<Link to={"/@/" + profileListItem.id}>
